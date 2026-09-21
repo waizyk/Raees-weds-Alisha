@@ -114,23 +114,26 @@ export async function uploadGuestPhotos(files, { code, uploadedBy }) {
   const client = requireClient();
   const uploaded = [];
   for (const file of files) {
-    if (!file.type.startsWith('image/')) throw new Error(`${file.name} is not an image.`);
-    if (file.size > 15 * 1024 * 1024) throw new Error(`${file.name} is larger than 15 MB.`);
-    const extension = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+    const mediaType = file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : null;
+    if (!mediaType) throw new Error(`${file.name} is not a supported image or video.`);
+    const maxSize = mediaType === 'video' ? 100 : 15;
+    if (file.size > maxSize * 1024 * 1024) throw new Error(`${file.name} is larger than ${maxSize} MB.`);
+    const extension = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || (mediaType === 'video' ? 'mp4' : 'jpg');
     const path = `${code}/${crypto.randomUUID()}.${extension}`;
     const { error: uploadError } = await client.storage.from('wedding-photos').upload(path, file, { upsert: false, contentType: file.type });
     if (uploadError) throw uploadError;
-    const { data: photoId, error: registerError } = await client.rpc('register_guest_photo', {
+    const { data: photoId, error: registerError } = await client.rpc('register_guest_media', {
       p_code: code,
       p_storage_path: path,
       p_uploaded_by: uploadedBy,
       p_caption: '',
+      p_media_type: mediaType,
     });
     if (registerError) {
       await client.storage.from('wedding-photos').remove([path]);
       throw registerError;
     }
-    uploaded.push({ id: photoId, path, name: file.name });
+    uploaded.push({ id: photoId, path, name: file.name, media_type: mediaType });
   }
   return uploaded;
 }
