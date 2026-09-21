@@ -26,12 +26,15 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Supabase publishable keys are intentionally public browser configuration.
+      # Database security is enforced by Row Level Security, never by hiding this key.
       - run: npm run build
         env:
-          # Supabase publishable browser configuration. Security is enforced by RLS.
           VITE_SUPABASE_URL: https://fbcomkxwkqvzwyhpxdau.supabase.co
           VITE_SUPABASE_ANON_KEY: sb_publishable_D16Eisy8DelZNiz4GRY6-g_1Bi-iNEL
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
