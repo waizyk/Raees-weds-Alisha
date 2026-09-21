@@ -8,7 +8,7 @@ import {
   Upload, UserCheck, Users, X, XCircle
 } from 'lucide-react';
 import './styles.css';
-import { isSupabaseConfigured, supabase, findInvitation, sendRsvp, signInHost, sendPasswordReset, setNewPassword, getHostSession, getHostProfile, listRsvps, saveInvitation, updateRsvp, uploadGuestPhotos, listApprovedPhotos, listPhotoQueue, moderatePhoto, getSiteSettings, saveSiteSettings } from './lib/supabase';
+import { isSupabaseConfigured, supabase, findInvitation, sendRsvp, signInHost, signOutHost, sendPasswordReset, setNewPassword, getHostSession, getHostProfile, listRsvps, saveInvitation, updateRsvp, uploadGuestPhotos, listApprovedPhotos, listPhotoQueue, moderatePhoto, getSiteSettings, saveSiteSettings } from './lib/supabase';
 
 const EVENT = {
   date: '24 October 2026',
@@ -63,6 +63,7 @@ function App() {
   useEffect(() => { if (toast) { const t = setTimeout(() => setToast(''), 3200); return () => clearTimeout(t); } }, [toast]);
 
   const go = (next) => { setView(next); setMenu(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const logout=async()=>{await signOutHost();setAdmin(false);setHostName('Wedding host');setRsvps([]);go('home');setToast('Signed out securely');};
   const mayView=(level)=>admin||level==='everyone'||(level==='invited'&&guestVerified);
 
   return <div className="app">
@@ -82,19 +83,19 @@ function App() {
     </header>
 
     <main>
-      {view === 'home' && <Home go={go} canAlbum={mayView(privacy.album_visibility)}/>} 
+      {view === 'home' && <Home go={go} canAlbum={mayView(privacy.album_visibility)}/>}
       {view === 'story' && <Story/>}
-      {view === 'details' && <Details go={go}/>} 
-      {view === 'rsvp' && <RsvpForm setRsvps={setRsvps} go={go} notify={setToast}/>} 
-      {view === 'album' && (mayView(privacy.album_visibility)?<Album album={album} setAlbum={setAlbum} notify={setToast}/>:<PrivateSection title="The album is private" go={go}/>)} 
-      {view === 'tree' && (mayView(privacy.tree_visibility)?<FamilyTree/>:<PrivateSection title="The family tree is private" go={go}/>)} 
-      {view === 'admin' && admin && <Admin rsvps={rsvps} setRsvps={setRsvps} notify={setToast} previewInvite={() => setInviteOpen(true)} hostName={hostName} privacy={privacy} setPrivacy={setPrivacy}/>} 
+      {view === 'details' && <Details go={go}/>}
+      {view === 'rsvp' && <RsvpForm setRsvps={setRsvps} go={go} notify={setToast}/>}
+      {view === 'album' && (mayView(privacy.album_visibility)?<Album album={album} setAlbum={setAlbum} notify={setToast}/>:<PrivateSection title="The album is private" go={go}/>)}
+      {view === 'tree' && (mayView(privacy.tree_visibility)?<FamilyTree/>:<PrivateSection title="The family tree is private" go={go}/>)}
+      {view === 'admin' && admin && <Admin rsvps={rsvps} setRsvps={setRsvps} notify={setToast} previewInvite={() => setInviteOpen(true)} hostName={hostName} privacy={privacy} setPrivacy={setPrivacy} onSignOut={logout}/>}
     </main>
 
-    {view !== 'home' && <Footer go={go} canAlbum={mayView(privacy.album_visibility)}/>} 
-    {loginOpen && <LoginModal close={() => setLoginOpen(false)} success={(profile) => { setAdmin(true); if(profile?.display_name)setHostName(profile.display_name); setLoginOpen(false); go('admin'); }}/>} 
-    {resetOpen && <ResetPasswordModal close={() => setResetOpen(false)} notify={setToast}/>} 
-    {inviteOpen && <InviteExperience close={() => setInviteOpen(false)} go={go} onVerified={()=>setGuestVerified(true)}/>} 
+    {view !== 'home' && <Footer go={go} canAlbum={mayView(privacy.album_visibility)}/>}
+    {loginOpen && <LoginModal close={() => setLoginOpen(false)} success={(profile) => { setAdmin(true); if(profile?.display_name)setHostName(profile.display_name); setLoginOpen(false); go('admin'); }}/>}
+    {resetOpen && <ResetPasswordModal close={() => setResetOpen(false)} notify={setToast}/>}
+    {inviteOpen && <InviteExperience close={() => setInviteOpen(false)} go={go} onVerified={()=>setGuestVerified(true)}/>}
     {toast && <div className="toast"><CheckCircle2 size={18}/>{toast}</div>}
   </div>;
 }
@@ -238,7 +239,7 @@ function FamilyTree() {
 }
 function Person({name, role, className, initials}) { return <div className={`person ${className}`}><div>{initials}</div><b>{name}</b><small>{role}</small></div>; }
 
-function Admin({ rsvps, setRsvps, notify, previewInvite, hostName, privacy, setPrivacy }) {
+function Admin({ rsvps, setRsvps, notify, previewInvite, hostName, privacy, setPrivacy, onSignOut }) {
   const [tab,setTab]=useState('overview'); const [search,setSearch]=useState('');
   const firstName=(hostName||'Host').split(' ')[0];
   const counts = useMemo(() => ({ invited:rsvps.reduce((a,r)=>a+r.guests,0), approved:rsvps.filter(r=>r.status==='approved').reduce((a,r)=>a+r.guests,0), pending:rsvps.filter(r=>r.status==='pending').reduce((a,r)=>a+r.guests,0), checked:rsvps.filter(r=>r.checkedIn).reduce((a,r)=>a+r.guests,0) }),[rsvps]);
@@ -248,14 +249,14 @@ function Admin({ rsvps, setRsvps, notify, previewInvite, hostName, privacy, setP
   const update=async(id,changes)=>{const previous=rsvps;setRsvps(rs=>rs.map(r=>r.id===id?{...r,...changes}:r));if(isSupabaseConfigured){try{await updateRsvp(id,changes)}catch(error){setRsvps(previous);notify(error.message||'Could not update guest');}}};
   const exportCsv=()=>{ const rows=[['Respondent','Invited names','Invite code','Guests','Status','Meal','Table','Checked in'],...rsvps.map(r=>[r.name,r.invitedAs||r.household,r.inviteCode||'',r.guests,r.status,r.meal,r.table||'',r.checkedIn?'Yes':'No'])]; const blob=new Blob([rows.map(x=>x.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n')],{type:'text/csv'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='raees-alisha-rsvps.csv';a.click();notify('RSVP list downloaded'); };
   const filtered=rsvps.filter(r=>(r.name+r.household).toLowerCase().includes(search.toLowerCase()));
-  return <div className="admin-page"><aside><div className="admin-brand"><span>R <i>和</i> A</span><small>WEDDING CONSOLE</small></div><button className={tab==='overview'?'active':''} onClick={()=>setTab('overview')}><LayoutDashboard/>Overview</button><button className={tab==='rsvps'?'active':''} onClick={()=>setTab('rsvps')}><ListChecks/>RSVP approvals <i>{rsvps.filter(r=>r.status==='pending').length}</i></button><button className={tab==='seating'?'active':''} onClick={()=>setTab('seating')}><TableProperties/>Tables & seating</button><button className={tab==='checkin'?'active':''} onClick={()=>setTab('checkin')}><UserCheck/>Day-of check-in</button><button className={tab==='photos'?'active':''} onClick={()=>setTab('photos')}><Camera/>Photo approvals</button><button className={tab==='privacy'?'active':''} onClick={()=>setTab('privacy')}><LockKeyhole/>Privacy controls</button><button onClick={previewInvite}><Mail/>Invitation preview</button><button className={tab==='questions'?'active':''} onClick={()=>setTab('questions')}><MessageCircleHeart/>Bride questionnaire</button><div className="admin-aside-bottom"><small>Signed in as</small><b>{hostName}</b><span>Private planning area</span></div></aside>
-    <section className="admin-main"><div className="admin-top"><div><p className="eyebrow">RAEES & ALISHA</p><h1>{tab==='questions'?'Bride’s design questionnaire':tab==='seating'?'Table & seat planner':tab==='checkin'?'Guest check-in':tab==='photos'?'Photo approvals':tab==='privacy'?'Privacy controls':tab==='rsvps'?'RSVP approvals':`Good afternoon, ${firstName}`}</h1></div><div className="admin-top-actions"><button className="button outline small" onClick={()=>refreshGuests(true)}><RefreshCw size={15}/> Refresh</button><button className="button outline small" onClick={exportCsv}><Download size={15}/> Export CSV</button></div></div>
+  return <div className="admin-page"><aside><div className="admin-brand"><span>R <i>和</i> A</span><small>WEDDING CONSOLE</small></div><button className={tab==='overview'?'active':''} onClick={()=>setTab('overview')}><LayoutDashboard/>Overview</button><button className={tab==='rsvps'?'active':''} onClick={()=>setTab('rsvps')}><ListChecks/>RSVP approvals <i>{rsvps.filter(r=>r.status==='pending').length}</i></button><button className={tab==='seating'?'active':''} onClick={()=>setTab('seating')}><TableProperties/>Tables & seating</button><button className={tab==='checkin'?'active':''} onClick={()=>setTab('checkin')}><UserCheck/>Day-of check-in</button><button className={tab==='photos'?'active':''} onClick={()=>setTab('photos')}><Camera/>Photo approvals</button><button className={tab==='privacy'?'active':''} onClick={()=>setTab('privacy')}><LockKeyhole/>Privacy controls</button><button onClick={previewInvite}><Mail/>Invitation preview</button><button className={tab==='questions'?'active':''} onClick={()=>setTab('questions')}><MessageCircleHeart/>Bride questionnaire</button><div className="admin-aside-bottom"><small>Signed in as</small><b>{hostName}</b><span>Private planning area</span><button onClick={onSignOut}><LockKeyhole/> Sign out</button></div></aside>
+    <section className="admin-main"><div className="admin-top"><div><p className="eyebrow">RAEES & ALISHA</p><h1>{tab==='questions'?'Bride’s design questionnaire':tab==='seating'?'Table & seat planner':tab==='checkin'?'Guest check-in':tab==='photos'?'Photo approvals':tab==='privacy'?'Privacy controls':tab==='rsvps'?'RSVP approvals':`Good afternoon, ${firstName}`}</h1></div><div className="admin-top-actions"><button className="button outline small" onClick={()=>refreshGuests(true)}><RefreshCw size={15}/> Refresh</button><button className="button outline small" onClick={exportCsv}><Download size={15}/> Export CSV</button><button className="button outline small admin-signout" onClick={onSignOut}><LockKeyhole size={15}/> Sign out</button></div></div>
       {tab==='overview'&&<><div className="stat-grid"><Stat label="Guests invited" value={counts.invited} icon={<Users/>}/><Stat label="Approved" value={counts.approved} icon={<CheckCircle2/>}/><Stat label="Awaiting approval" value={counts.pending} icon={<Clock/>}/><Stat label="Checked in" value={counts.checked} icon={<UserCheck/>}/></div><div className="dashboard-grid"><div className="dash-card"><div className="card-title"><h3>Recent responses</h3><button onClick={()=>setTab('rsvps')}>View all <ArrowRight/></button></div>{rsvps.slice(-4).reverse().map(r=><MiniGuest key={r.id} r={r}/>) }{!rsvps.length&&<div className="empty-list"><Mail/><b>No responses yet</b><span>Guest RSVPs will appear here.</span></div>}</div><div className="dash-card progress-card"><h3>RSVP progress</h3><div className="ring" style={{'--p':`${confirmationRate}%`}}><span>{confirmationRate}%<small>confirmed</small></span></div><p>{counts.invited ? `${counts.approved} of ${counts.invited} invited guests approved` : 'Responses will appear here as guests RSVP'}</p></div></div><InviteTools notify={notify}/></>}
-      {tab==='rsvps'&&<GuestTable rsvps={filtered} search={search} setSearch={setSearch} update={update}/>} 
-      {tab==='checkin'&&<Checkin rsvps={filtered.filter(r=>r.status==='approved')} search={search} setSearch={setSearch} update={update}/>} 
-      {tab==='seating'&&<Seating rsvps={rsvps} update={update}/>} 
-      {tab==='photos'&&<PhotoApprovals notify={notify}/>} 
-      {tab==='privacy'&&<PrivacyControls privacy={privacy} setPrivacy={setPrivacy} notify={notify}/>} 
+      {tab==='rsvps'&&<GuestTable rsvps={filtered} search={search} setSearch={setSearch} update={update}/>}
+      {tab==='checkin'&&<Checkin rsvps={filtered.filter(r=>r.status==='approved')} search={search} setSearch={setSearch} update={update}/>}
+      {tab==='seating'&&<Seating rsvps={rsvps} update={update}/>}
+      {tab==='photos'&&<PhotoApprovals notify={notify}/>}
+      {tab==='privacy'&&<PrivacyControls privacy={privacy} setPrivacy={setPrivacy} notify={notify}/>}
       {tab==='questions'&&<Questions/>}
     </section></div>;
 }
@@ -269,16 +270,17 @@ function InviteTools({notify}){
   const code=`${cleanNames.replace(/[^a-z0-9]/gi,'').slice(0,8).toUpperCase()||'INVITE'}-24`;
   const params=new URLSearchParams({invite:code,names:cleanNames,limit:String(limit)});
   const url=`${window.location.origin}${window.location.pathname}?${params.toString()}`;
-  const message=`Bismillāhir-Raḥmānir-Raḥīm\n\n${cleanNames}, Mohammed Raees Khan & Alisha Ahmed request the honour of your presence at their Nikah and wedding celebration on 24 October 2026 in Katima Mulilo.\n\nThis invitation is reserved for ${limit} ${limit===1?'guest':'guests'}. Kindly RSVP by 5 October 2026.\n\nOpen your personal invitation: ${url}`;
+  const message=`Bismillāhir-Raḥmānir-Raḥīm\n\n${cleanNames}, Mohammed Raees Khan & Alisha Ahmed request the honour of your presence at their Nikah and wedding celebration on 24 October 2026 in Katima Mulilo.\n\nThis invitation is reserved for ${limit} ${limit===1?'guest':'guests'}. Kindly RSVP by 5 October 2026.\n\nYour invite code: ${code}\n\nOpen your personal invitation: ${url}`;
   const whatsappNumber=phone.replace(/\D/g,'');
   const whatsappUrl=`https://api.whatsapp.com/send?${whatsappNumber?`phone=${whatsappNumber}&`:''}text=${encodeURIComponent(message)}`;
   const persist=async()=>{ if(isSupabaseConfigured) await saveInvitation({code,guestNames:cleanNames,phone:whatsappNumber,limit}); };
   const copyText=(text)=>{const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';area.style.pointerEvents='none';document.body.appendChild(area);area.focus();area.select();area.setSelectionRange(0,text.length);const copied=document.execCommand('copy');document.body.removeChild(area);if(copied)return Promise.resolve();if(navigator.clipboard?.writeText)return navigator.clipboard.writeText(text);return Promise.reject(new Error('Copy is unavailable here. Select the generated link and copy it manually.'));};
-  const copy=async()=>{try{const copying=copyText(url);await persist();await copying;notify('Invitation saved and personal link copied');}catch(error){notify(error.message||'Invitation could not be saved');}};
+  const copy=async()=>{try{const copying=copyText(url);await persist();await copying;notify(`Invitation ${code} saved and link copied`);}catch(error){notify(error.message||'Invitation could not be saved');}};
+  const copyCode=async()=>{try{const copying=copyText(code);await persist();await copying;notify(`Invite code ${code} copied`);}catch(error){notify(error.message||'Invitation could not be saved');}};
   const openAfterSave=async(destination,successMessage)=>{const tab=window.open('about:blank','_blank');if(tab)tab.opener=null;try{await persist();if(tab){tab.location.replace(destination);}else{window.location.assign(destination);}if(successMessage)notify(successMessage);}catch(error){if(tab)tab.close();notify(error.message||'Invitation could not be saved');}};
   const preview=()=>openAfterSave(url);
   const saveForWhatsApp=()=>{persist().then(()=>notify('Invitation saved · opening WhatsApp')).catch(error=>notify(error.message||'Invitation could not be saved'));};
-  return <div className="invite-tools dash-card"><div><p className="eyebrow">WHATSAPP E-INVITATIONS</p><h3>Create a personal opening invitation</h3><p>Enter the names exactly as they should appear on the card. Every link carries the guest names and permitted party size into the RSVP.</p></div><div className="invite-builder"><div className="invite-fields"><label>Names on the invitation<input value={guestNames} onChange={e=>setGuestNames(e.target.value)} placeholder="Enter invited guest name(s)"/></label><label>WhatsApp number <small>Optional · country code first</small><input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="e.g. 264 81 234 5678"/></label><label>Maximum guests<select value={limit} onChange={e=>setLimit(Number(e.target.value))}>{[1,2,3,4,5,6,7,8,9,10].map(n=><option value={n} key={n}>{n} guest{n>1?'s':''}</option>)}</select></label></div><div className="generated-link"><Link2/><span>{cleanNames?url:'Enter the invited names to create their link'}</span></div><div className="invite-actions"><button disabled={!cleanNames} onClick={preview}><ExternalLink/> Preview</button><button disabled={!cleanNames} onClick={copy}><Link2/> Copy link</button><a className={`whatsapp-action ${!cleanNames?'disabled':''}`} href={cleanNames?whatsappUrl:undefined} target="_blank" rel="noopener noreferrer external" onClick={e=>{if(!cleanNames){e.preventDefault();return}saveForWhatsApp()}}><Send/> {whatsappNumber?'Send to guest':'Open WhatsApp'}</a></div></div></div>
+  return <div className="invite-tools dash-card"><div><p className="eyebrow">WHATSAPP E-INVITATIONS</p><h3>Create a personal opening invitation</h3><p>Enter the names exactly as they should appear on the card. Every link carries the guest names and permitted party size into the RSVP.</p></div><div className="invite-builder"><div className="invite-fields"><label>Names on the invitation<input value={guestNames} onChange={e=>setGuestNames(e.target.value)} placeholder="Enter invited guest name(s)"/></label><label>WhatsApp number <small>Optional · country code first</small><input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="e.g. 264 81 234 5678"/></label><label>Maximum guests<select value={limit} onChange={e=>setLimit(Number(e.target.value))}>{[1,2,3,4,5,6,7,8,9,10].map(n=><option value={n} key={n}>{n} guest{n>1?'s':''}</option>)}</select></label></div><div className="invite-code-display"><div><small>PERSONAL INVITE CODE</small><b>{cleanNames?code:'—'}</b><span>Guests can use this code if they cannot open their link.</span></div><button disabled={!cleanNames} onClick={copyCode}><Link2/> Copy code</button></div><div className="generated-link"><Link2/><span>{cleanNames?url:'Enter the invited names to create their link'}</span></div><div className="invite-actions"><button disabled={!cleanNames} onClick={preview}><ExternalLink/> Preview</button><button disabled={!cleanNames} onClick={copy}><Link2/> Copy link</button><a className={`whatsapp-action ${!cleanNames?'disabled':''}`} href={cleanNames?whatsappUrl:undefined} target="_blank" rel="noopener noreferrer external" onClick={e=>{if(!cleanNames){e.preventDefault();return}saveForWhatsApp()}}><Send/> {whatsappNumber?'Send to guest':'Open WhatsApp'}</a></div></div></div>
 }
 function Status({status}){return <span className={`status ${status}`}>{status}</span>}
 function GuestTable({rsvps,search,setSearch,update}){return <div className="dash-card table-card"><div className="table-tools"><div><Search/><input placeholder="Search guests or households" value={search} onChange={e=>setSearch(e.target.value)}/></div><span>{rsvps.length} responses</span></div><div className="responsive-table"><table><thead><tr><th>Guest / household</th><th>Party</th><th>Meal</th><th>Status</th><th>Actions</th></tr></thead><tbody>{!rsvps.length&&<tr><td colSpan="5"><div className="empty-table"><Users/><b>No guest responses yet</b><span>New RSVPs will be ready for approval here.</span></div></td></tr>}{rsvps.map(r=><tr key={r.id}><td><b>{r.name}</b><small>{r.household}</small></td><td>{r.guests}</td><td>{r.meal}</td><td><Status status={r.status}/></td><td>{r.status==='pending'?<div className="row-actions"><button onClick={()=>update(r.id,{status:'approved'})}><Check/> Approve</button><button className="reject" onClick={()=>update(r.id,{status:'declined'})}><X/> Decline</button></div>:<button className="reset" onClick={()=>update(r.id,{status:'pending'})}>Change</button>}</td></tr>)}</tbody></table></div></div>}
@@ -324,7 +326,7 @@ function InviteExperience({close,go,onVerified}){
             <div className="invite-date"><b>24</b><span>OCTOBER<br/>2026</span></div>
             <p className="invite-place">KATIMA MULILO · NAMIBIA</p>
             <p className="dua">May Allah bless this union with love, mercy and barakah.</p>
-            <div className="invite-to">PERSONALLY INVITED<br/><b>{guestNames}</b><small>{guestLimit===1?'Individual invitation':`Invitation for up to ${guestLimit} guests`}</small></div>
+            <div className="invite-to">PERSONALLY INVITED<br/><b>{guestNames}</b><small>{guestLimit===1?'Individual invitation':`Invitation for up to ${guestLimit} guests`}{inviteCode&&<> · Code: {inviteCode}</>}</small></div>
             <p className="rsvp-by">KINDLY RSVP BY 5 OCTOBER 2026</p>
             <div className="card-actions"><button onClick={(e)=>{e.stopPropagation();enter('rsvp')}}>Kindly respond <ArrowRight/></button><button onClick={(e)=>{e.stopPropagation();enter('details')}}>View details</button></div>
           </div>
