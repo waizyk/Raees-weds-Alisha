@@ -39,8 +39,10 @@ create table if not exists public.event_proceedings (
 alter table public.wedding_settings enable row level security;
 alter table public.event_proceedings enable row level security;
 
+drop policy if exists "Hosts manage wedding settings" on public.wedding_settings;
 create policy "Hosts manage wedding settings" on public.wedding_settings
 for all to authenticated using (public.is_wedding_host()) with check (public.is_wedding_host());
+drop policy if exists "Hosts manage proceedings" on public.event_proceedings;
 create policy "Hosts manage proceedings" on public.event_proceedings
 for all to authenticated using (public.is_wedding_host()) with check (public.is_wedding_host());
 
