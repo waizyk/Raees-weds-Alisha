@@ -63,10 +63,16 @@ export async function getHostSession() {
 }
 
 export async function getHostProfile() {
-  const { data, error } = await requireClient().rpc('get_my_host_profile');
+  const client = requireClient();
+  const [{ data: allowed, error }, { data: userData }] = await Promise.all([
+    client.rpc('is_wedding_host'),
+    client.auth.getUser(),
+  ]);
   if (error) throw error;
-  if (!data) throw new Error('This account is signed in but has not been authorised as a wedding host.');
-  return { display_name: data };
+  if (!allowed) throw new Error('This account is signed in but has not been authorised as a wedding host.');
+  const email = userData?.user?.email?.toLowerCase() || '';
+  const displayName = email.startsWith('alisha') ? 'Alisha Ahmed' : email.startsWith('mraees') ? 'Raees Khan' : 'Wedding host';
+  return { display_name: displayName };
 }
 
 export async function listRsvps() {
