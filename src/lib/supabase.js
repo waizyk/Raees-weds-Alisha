@@ -21,14 +21,14 @@ export async function findInvitation(code) {
   return data?.[0] || null;
 }
 
-export async function sendRsvp({ code, name, email, attending, guests, meal, note }) {
+export async function sendRsvp({ code, name, attending, guests, note }) {
   const { data, error } = await requireClient().rpc('submit_rsvp', {
     p_code: code,
     p_respondent_name: name,
-    p_email: email,
+    p_email: '',
     p_attending: attending,
     p_guest_count: Number(guests),
-    p_meal: meal,
+    p_meal: '',
     p_note: note || '',
   });
   if (error) throw error;
@@ -83,10 +83,8 @@ export async function listRsvps() {
     invitedAs: row.invitations.guest_names,
     inviteCode: row.invitations.code,
     name: row.respondent_name,
-    email: row.email,
     guests: row.guest_count,
     status: row.status,
-    meal: row.meal,
     note: row.note,
     table: row.table_number,
     checkedIn: row.checked_in,
