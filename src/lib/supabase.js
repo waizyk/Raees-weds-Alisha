@@ -164,6 +164,14 @@ export async function moderatePhoto(id, status) {
   if (error) throw error;
 }
 
+export async function deleteGuestMedia(media) {
+  const client = requireClient();
+  const { error: storageError } = await client.storage.from('wedding-photos').remove([media.storage_path]);
+  if (storageError) throw storageError;
+  const { error } = await client.from('guest_photos').delete().eq('id', media.id);
+  if (error) throw error;
+}
+
 export async function getSiteSettings() {
   if (!isSupabaseConfigured) return { album_visibility: 'everyone', tree_visibility: 'everyone' };
   const { data, error } = await requireClient().rpc('get_site_settings');
@@ -182,6 +190,132 @@ export async function saveSiteSettings(settings) {
   }).select().single();
   if (error) throw error;
   return data;
+}
+
+export async function getFamilyTree(code = null) {
+  const { data, error } = await requireClient().rpc('get_family_tree', { p_code: code || null });
+  if (error) throw error;
+  return data || { members: [], links: [] };
+}
+
+export async function listFamilyMembersForHost() {
+  const client = requireClient();
+  const [{ data: members, error: memberError }, { data: links, error: linkError }] = await Promise.all([
+    client.from('family_members').select('*').order('generation').order('sort_order'),
+    client.from('family_links').select('*'),
+  ]);
+  if (memberError) throw memberError;
+  if (linkError) throw linkError;
+  return { members: members || [], links: links || [] };
+}
+
+export async function saveFamilyMember(member) {
+  const client = requireClient();
+  const payload = {
+    name: member.name.trim(), side: member.side, generation: Number(member.generation),
+    relationship_label: member.relationship_label.trim(), details: member.details || '',
+    photo_url: member.photo_url || null, sort_order: Number(member.sort_order) || 0,
+    is_visible: member.is_visible !== false, updated_at: new Date().toISOString(),
+  };
+  const query = member.id
+    ? client.from('family_members').update(payload).eq('id', member.id)
+    : client.from('family_members').insert(payload);
+  const { data, error } = await query.select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteFamilyMember(id) {
+  const { error } = await requireClient().from('family_members').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function saveFamilyLink(link) {
+  const { data, error } = await requireClient().from('family_links').insert({
+    from_member_id: link.from_member_id, to_member_id: link.to_member_id, link_type: link.link_type,
+  }).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteFamilyLink(id) {
+  const { error } = await requireClient().from('family_links').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function submitFamilySuggestion(suggestion) {
+  const { data, error } = await requireClient().rpc('submit_family_suggestion', {
+    p_code: suggestion.code, p_suggested_by: suggestion.suggestedBy,
+    p_suggested_name: suggestion.suggestedName, p_relationship_label: suggestion.relationship,
+    p_placement_notes: suggestion.placement, p_details: suggestion.details || '',
+  });
+  if (error) throw error;
+  return data;
+}
+
+export async function listFamilySuggestions() {
+  const { data, error } = await requireClient().from('family_suggestions')
+    .select('*, invitations(guest_names,code)').order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+}
+
+export async function updateFamilySuggestion(id, status) {
+  const { error } = await requireClient().from('family_suggestions').update({
+    status, reviewed_at: new Date().toISOString(),
+  }).eq('id', id);
+  if (error) throw error;
+}
+
+export async function getEventDetails(code = null) {
+  if (!isSupabaseConfigured) return null;
+  const { data, error } = await requireClient().rpc('get_event_details', { p_code: code || null });
+  if (error) throw error;
+  return data;
+}
+
+export async function saveWeddingSettings(settings) {
+  const { data: { user } } = await requireClient().auth.getUser();
+  const { data, error } = await requireClient().from('wedding_settings').upsert({
+    ...settings, id: 1, updated_by: user?.id || null, updated_at: new Date().toISOString(),
+  }).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function listProceedingsForHost() {
+  const { data, error } = await requireClient().from('event_proceedings').select('*')
+    .order('event_date').order('start_time', { nullsFirst: false }).order('sort_order');
+  if (error) throw error;
+  return data || [];
+}
+
+export async function saveProceeding(proceeding) {
+  const payload = {
+    title: proceeding.title.trim(), event_date: proceeding.event_date,
+    start_time: proceeding.start_time || null, end_time: proceeding.end_time || null,
+    venue_name: proceeding.venue_name || '', address: proceeding.address || '',
+    description: proceeding.description || '', attire: proceeding.attire || '',
+    location_private: proceeding.location_private !== false,
+    is_visible: proceeding.is_visible !== false, sort_order: Number(proceeding.sort_order) || 0,
+    updated_at: new Date().toISOString(),
+  };
+  const query = proceeding.id
+    ? requireClient().from('event_proceedings').update(payload).eq('id', proceeding.id)
+    : requireClient().from('event_proceedings').insert(payload);
+  const { data, error } = await query.select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteProceeding(id) {
+  const { error } = await requireClient().from('event_proceedings').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function deleteRsvp(id) {
+  const { error } = await requireClient().from('rsvps').delete().eq('id', id);
+  if (error) throw error;
 }
 
 export async function updateRsvp(id, changes) {
