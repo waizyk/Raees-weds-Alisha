@@ -63,13 +63,10 @@ export async function getHostSession() {
 }
 
 export async function getHostProfile() {
-  const { data, error } = await requireClient()
-    .from('wedding_hosts')
-    .select('display_name')
-    .maybeSingle();
+  const { data, error } = await requireClient().rpc('get_my_host_profile');
   if (error) throw error;
   if (!data) throw new Error('This account is signed in but has not been authorised as a wedding host.');
-  return data;
+  return { display_name: data };
 }
 
 export async function listRsvps() {
