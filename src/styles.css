@@ -28,3 +28,6 @@
 /* Recursively growing family branches */
 .family-node{min-width:0}.family-children-row .family-node{position:relative;padding:6px 0}.family-children-row .family-node:before{content:'';position:absolute;left:-13px;top:32px;width:12px;border-top:1px solid #a9bbb1}.family-children-row .family-node+.family-node{border-top:1px dashed #dbe3de}.family-node .family-children-row{margin-left:20px;background:#f5f8f5;padding-right:5px}.descendants-panel>div{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.descendants-panel .family-unit{height:max-content}.descendants-panel .family-node .family-map-card{background:white}
 @media(max-width:700px){.descendants-panel>div{grid-template-columns:1fr}}
+
+/* Compact references to the central couple beneath their parents */
+.central-child-reference{width:100%;border:1px solid #d8e1dc;background:#fffdf8;padding:10px 11px;display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;text-align:left;color:var(--jade)}.central-child-reference b{font:600 13px var(--serif)}.central-child-reference small{grid-column:1;font-size:5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}.central-child-reference svg{grid-column:2;grid-row:1/3;width:13px}.central-child-reference:hover{border-color:var(--red);background:#faf4ed}
