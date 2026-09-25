@@ -42,7 +42,7 @@ export async function signInHost(email, password) {
 }
 
 export async function sendPasswordReset(email) {
-  const redirectTo = `${window.location.origin}${window.location.pathname}`;
+  const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}`;
   const { error } = await requireClient().auth.resetPasswordForEmail(email, { redirectTo });
   if (error) throw error;
 }

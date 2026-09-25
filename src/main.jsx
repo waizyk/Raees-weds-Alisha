@@ -306,7 +306,7 @@ function InviteTools({notify,eventInfo}){
   const cleanNames=guestNames.trim();
   const code=`${cleanNames.replace(/[^a-z0-9]/gi,'').slice(0,8).toUpperCase()||'INVITE'}-24`;
   const params=new URLSearchParams({invite:code,names:cleanNames,limit:String(limit)});
-  const url=`${window.location.origin}${window.location.pathname}?${params.toString()}`;
+  const url=`${window.location.origin}${import.meta.env.BASE_URL}?${params.toString()}`;
   const s=eventInfo.settings;
   const message=`Bismillāhir-Raḥmānir-Raḥīm\n\n${cleanNames}, Mohammed Raees Khan & Alisha Ahmed request the honour of your presence at their Nikah and wedding celebration on ${formatDate(s.event_date)} in ${s.city}.\n\nThis invitation is reserved for ${limit} ${limit===1?'guest':'guests'}. Kindly RSVP by ${formatDate(s.rsvp_deadline)}.\n\nYour invite code: ${code}\n\nOpen your personal invitation: ${url}`;
   const whatsappNumber=phone.replace(/\D/g,'');
