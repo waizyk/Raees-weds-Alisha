@@ -386,10 +386,10 @@ function InviteExperience({close,go,onVerified,eventInfo}){
   return <div className={`invite-experience ${opened?'opened':''}`}>
     <div className="invite-stars"/><button className="invite-close" onClick={()=>enter('home')} aria-label="Close invitation"><X/></button>
     <div className="opening-message"><span>AN INVITATION FOR</span><b>{guestNames}</b></div>
-    <div className="envelope-scene" onClick={()=>setOpened(true)}>
-      <div className="envelope">
-        <div className="envelope-back"/>
-        <div className="letter-slot"><div className="invitation-card">
+    <div className="scroll-scene" onClick={()=>setOpened(true)}>
+      <div className="ceremonial-scroll">
+        <div className="scroll-rod scroll-rod-top"><i/><span/><i/></div>
+        <div className="scroll-window"><div className="scroll-invitation">
           <div className="card-inner">
             <span className="double-happiness">囍</span>
             <p className="invite-bismillah">BISMILLĀHIR-RAḤMĀNIR-RAḤĪM</p>
@@ -404,9 +404,10 @@ function InviteExperience({close,go,onVerified,eventInfo}){
             <div className="card-actions"><button onClick={(e)=>{e.stopPropagation();enter('rsvp')}}>Kindly respond <ArrowRight/></button><button onClick={(e)=>{e.stopPropagation();enter('details')}}>View details</button></div>
           </div>
         </div></div>
-        <div className="envelope-front"/><div className="envelope-flap"/><div className="wax-seal"><span>R<i>A</i></span></div>
+        <div className="scroll-rod scroll-rod-bottom"><i/><span/><i/></div>
+        <div className="scroll-wax-seal"><span>R<i>A</i></span></div>
       </div>
-      <p className="tap-note">{opened?'Your invitation awaits':'Opening your invitation…'}</p>
+      <p className="tap-note">{opened?'Your invitation awaits':'Unrolling your invitation…'}</p>
     </div>
   </div>
 }
