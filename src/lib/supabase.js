@@ -64,15 +64,18 @@ export async function getHostSession() {
 
 export async function getHostProfile() {
   const client = requireClient();
-  const [{ data: allowed, error }, { data: userData }] = await Promise.all([
+  const [{ data: allowed, error: accessError }, { data: profileName, error: profileError }, { data: userData }] = await Promise.all([
     client.rpc('is_wedding_host'),
+    client.rpc('get_my_host_profile'),
     client.auth.getUser(),
   ]);
-  if (error) throw error;
+  if (accessError) throw accessError;
   if (!allowed) throw new Error('This account is signed in but has not been authorised as a wedding host.');
-  const email = userData?.user?.email?.toLowerCase() || '';
-  const displayName = email.startsWith('alisha') ? 'Alisha Ahmed' : email.startsWith('mraees') ? 'Raees Khan' : 'Wedding host';
-  return { display_name: displayName };
+  if (profileError) throw new Error('Your Host account is authorised, but its saved display name could not be loaded.');
+  const metadata = userData?.user?.user_metadata || {};
+  const savedName = typeof profileName === 'string' ? profileName.trim() : '';
+  const metadataName = String(metadata.display_name || metadata.full_name || metadata.name || '').trim();
+  return { display_name: savedName || metadataName || 'Wedding host' };
 }
 
 export async function listRsvps() {
