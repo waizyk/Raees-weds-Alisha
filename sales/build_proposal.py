@@ -180,7 +180,7 @@ comparison = [
     ['Seating + check-in','—','Included','Included'],
     ['Guest media album','2 GB','10 GB','30 GB'],
     ['Interactive family map','—','Included','Included'],
-    ['Hosting included','6 months','12 months','18 months'],
+    ['Hosting included','6 months','12 months','Forever Archive'],
     ['Design revisions','2 rounds','3 rounds','5 rounds'],
     ['Investment','R 5,500','R 9,500','R 14,000*'],
 ]
@@ -223,7 +223,8 @@ story += [package_card('Black Label Wedding','CONCIERGE BUILD','R 14,000','A pre
     'Advanced planner/Host onboarding and rehearsal session',
     'Remote wedding-day technical support window',
     'Five consolidated design revision rounds',
-    'Eighteen months of hosting and 60-day post-event support',
+    'Forever Archive: ongoing online access plus a downloadable post-wedding archive to keep indefinitely',
+    'Sixty-day priority post-event support and archive handover assistance',
 ])]
 story += [Spacer(1,5*mm),panel([P('EARLY-BIRD BLACK LABEL // R 12,500','H2Dark'),P('Save R 1,500 when the signed agreement and booking deposit are received at least six calendar months before the confirmed wedding date. Subject to production availability and the scope remaining within the Black Label package.','SmallDark')],pad=10,border=GREEN),Spacer(1,3*mm),P('* Standard Black Label price is R 14,000. Physical event staffing, travel, paid messaging, ticketing, livestreaming and third-party licences are not included unless specifically added to the quotation.','SmallDark'),PageBreak()]
 
@@ -236,7 +237,7 @@ addons = [
     ('Additional 5 GB media storage','R 450','Added storage allocation for the active hosting period.'),
     ('Additional design revision round','R 750','One consolidated revision after the included rounds are complete.'),
     ('On-site check-in support','From R 3,500','Durban-area attendance support. Travel, accommodation and extra devices quoted separately.'),
-    ('Digital archive renewal','R 650 / year','Continued online archive after included hosting ends; subject to standard storage limits.'),
+    ('Digital archive renewal','R 650 / year','Continued online archive after included hosting ends; subject to standard storage limits. Not required for Black Label while its Forever Archive remains active.'),
     ('Rush build / compressed lead time','+25%','Applies when booking fewer than six weeks before the wedding or where launch is required in fewer than 10 business days. Feasibility depends on scope and complete, approved content.'),
     ('WhatsApp Business API integration','Quoted separately','Meta template approval, conversation fees and third-party provider costs are excluded.'),
     ('Additional bespoke functionality','R 950 / hour','Used only after a written estimate and client approval.'),
@@ -274,7 +275,8 @@ terms = [
     terms_row('PRIVACY','Ace Tech will use reasonable technical safeguards. The client controls guest-list accuracy, consent and authorised Host access.'),
     terms_row('THIRD PARTIES','Domain, payment, Meta/WhatsApp, SMS and other provider fees are excluded unless explicitly stated.'),
     terms_row('OWNERSHIP','The client owns supplied content and exported event data. Ace Tech retains its platform, reusable components and underlying source code.'),
-    terms_row('ARCHIVE','At the end of included hosting, the client may renew, request an export or close the event subject to the agreed retention process.'),
+    terms_row('FOREVER ARCHIVE','Black Label includes ongoing online archive access for the original client for as long as Ace Tech operates and can reasonably maintain the service, subject to fair use, the included 30 GB allocation and third-party infrastructure availability. It also includes a downloadable post-wedding archive that the client may retain indefinitely. “Forever” describes the continuing archive benefit and permanent downloadable copy; it is not a guarantee that any third-party host, domain or online technology will exist without interruption in perpetuity.'),
+    terms_row('ARCHIVE','For Essential and Signature, at the end of included hosting the client may renew, request an export or close the event subject to the agreed retention process. Black Label does not require annual archive renewal while its Forever Archive remains active.'),
 ]
 terms_style = TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'TOP')])
 tt=Table(terms[:7],colWidths=[35*mm,133*mm])
