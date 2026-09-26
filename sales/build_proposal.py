@@ -182,7 +182,7 @@ comparison = [
     ['Interactive family map','—','Included','Included'],
     ['Hosting included','6 months','12 months','18 months'],
     ['Design revisions','2 rounds','3 rounds','5 rounds'],
-    ['Investment','R 5,500','R 9,500','R 14,000'],
+    ['Investment','R 5,500','R 9,500','R 14,000*'],
 ]
 ct=Table([[Paragraph(str(c), styles['SmallDark']) if not hasattr(c,'wrap') else c for c in row] for row in comparison], colWidths=[58*mm,35*mm,36*mm,39*mm], repeatRows=1)
 ct.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PANEL_2),('BACKGROUND',(2,1),(2,-1),colors.HexColor('#0B1912')),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('TEXTCOLOR',(0,0),(-1,-1),SOFT),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
@@ -225,7 +225,7 @@ story += [package_card('Black Label Wedding','CONCIERGE BUILD','R 14,000','A pre
     'Five consolidated design revision rounds',
     'Eighteen months of hosting and 60-day post-event support',
 ])]
-story += [Spacer(1,6*mm),P('Physical event staffing, travel, paid messaging, ticketing, livestreaming and third-party licences are not included unless specifically added to the quotation.','SmallDark'),PageBreak()]
+story += [Spacer(1,5*mm),panel([P('EARLY-BIRD BLACK LABEL // R 12,500','H2Dark'),P('Save R 1,500 when the signed agreement and booking deposit are received at least six calendar months before the confirmed wedding date. Subject to production availability and the scope remaining within the Black Label package.','SmallDark')],pad=10,border=GREEN),Spacer(1,3*mm),P('* Standard Black Label price is R 14,000. Physical event staffing, travel, paid messaging, ticketing, livestreaming and third-party licences are not included unless specifically added to the quotation.','SmallDark'),PageBreak()]
 
 # Add-ons
 story += section_header('07 // Optional upgrades', 'Build the exact service level required.', 'Add-ons may be selected before production or approved later through a written change request.')
@@ -263,7 +263,8 @@ story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Essent
 story += section_header('09 // Commercial terms', 'Transparent terms protect the client and the project.')
 terms = [
     terms_row('PAYMENT','50% booking deposit is payable to reserve production capacity. The remaining 50% is payable after final client approval and before the website is made publicly accessible or guest invitations are released. Ace Tech is not obliged to launch until cleared payment is received.'),
-    terms_row('VALIDITY','Pricing is valid until 10 October 2026 and may be revised thereafter.'),
+    terms_row('VALIDITY','Standard proposal pricing is valid until 10 October 2026 and may be revised thereafter. The early-bird mechanism remains subject to written quotation validity, eligibility and production availability.'),
+    terms_row('EARLY BIRD','The Black Label early-bird package price is R 12,500, a saving of R 1,500 from the R 14,000 standard price. Eligibility requires the signed agreement and cleared 50% booking deposit to be received at least six calendar months before the confirmed wedding date. The wedding date must be disclosed before acceptance. The offer cannot be combined with another discount and excludes add-ons, rush fees and third-party costs.'),
     terms_row('CURRENCY','All prices are in ZAR. VAT, if legally applicable, will be shown on the invoice.'),
     terms_row('CONTENT','The client supplies accurate names, dates, venue details, photographs and guest information with permission to use them.'),
     terms_row('REVISIONS','A revision round is one consolidated written feedback submission. New scope is quoted separately.'),
@@ -275,12 +276,17 @@ terms = [
     terms_row('OWNERSHIP','The client owns supplied content and exported event data. Ace Tech retains its platform, reusable components and underlying source code.'),
     terms_row('ARCHIVE','At the end of included hosting, the client may renew, request an export or close the event subject to the agreed retention process.'),
 ]
-tt=Table(terms,colWidths=[35*mm,133*mm])
-tt.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'TOP')]))
-story += [tt,Spacer(1,4*mm),P('These commercial terms, the accepted proposal, the final statement of work and the invoice together form the agreement between the client and Ace Tech. By signing below or paying the booking deposit, the client confirms acceptance and intends to be legally bound. If documents conflict, the signed statement of work takes priority. Nothing in these terms excludes rights that cannot lawfully be excluded under South African law.','SmallDark'),PageBreak()]
+terms_style = TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'TOP')])
+tt=Table(terms[:7],colWidths=[35*mm,133*mm])
+tt.setStyle(terms_style)
+story += [tt,PageBreak()]
+story += section_header('09 // Commercial terms continued', 'Delivery, privacy and ownership protections.')
+tt2=Table(terms[7:],colWidths=[35*mm,133*mm])
+tt2.setStyle(terms_style)
+story += [tt2,Spacer(1,5*mm),panel([P('BINDING ACCEPTANCE','H3Dark'),P('These commercial terms, the accepted proposal, the final statement of work and the invoice together form the agreement between the client and Ace Tech. By signing below or paying the booking deposit, the client confirms acceptance and intends to be legally bound. If documents conflict, the signed statement of work takes priority. Nothing in these terms excludes rights that cannot lawfully be excluded under South African law.','SmallDark')],pad=10,border=GREEN),PageBreak()]
 
 # Close
-story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Wedding Experience', 'CoverSub'),Spacer(1,10*mm)]
+story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Wedding Experience<br/><font color="#00F58A">Early-bird Black Label: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
