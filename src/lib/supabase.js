@@ -81,7 +81,7 @@ export async function getHostProfile() {
 export async function listRsvps() {
   const { data, error } = await requireClient()
     .from('rsvps')
-    .select('*, invitations!inner(code,guest_names,max_guests)')
+    .select('*, invitations!inner(code,guest_names,max_guests,whatsapp_number)')
     .order('submitted_at', { ascending: false });
   if (error) throw error;
   return (data || []).map((row) => ({
@@ -89,6 +89,10 @@ export async function listRsvps() {
     household: row.invitations.guest_names,
     invitedAs: row.invitations.guest_names,
     inviteCode: row.invitations.code,
+    whatsappNumber: row.invitations.whatsapp_number || '',
+    maxGuests: row.invitations.max_guests,
+    submittedAt: row.submitted_at,
+    updatedAt: row.updated_at,
     name: row.respondent_name,
     guests: row.guest_count,
     status: row.status,
