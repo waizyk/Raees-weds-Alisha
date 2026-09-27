@@ -56,16 +56,31 @@ def matrix_background(c: Canvas, doc):
     c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
     rnd = random.Random(180 + doc.page)
     c.setFont('DVMono', 5.5)
+    matrix_streams = (
+        'ACE TECH 01<>[]{}//',
+        'ACE//TECH 1010<>',
+        '<ACE_TECH/> 0101',
+        '{ACE:TECH} []01',
+        'ACE OPS // ACE TECH',
+        '01ACE01TECH10<>',
+    )
     for x in range(7, int(PAGE_W), 18):
-        if rnd.random() < .58:
+        if rnd.random() < .52:
             continue
         y0 = rnd.randint(60, int(PAGE_H)-40)
-        length = rnd.randint(3, 13)
+        stream = rnd.choice(matrix_streams)
+        start = rnd.randrange(len(stream))
+        length = rnd.randint(8, 20)
         for j in range(length):
-            alpha = max(.025, .13 - j*.009)
+            alpha = max(.025, .15 - j*.007)
             c.setFillAlpha(alpha)
             c.setFillColor(GREEN)
-            c.drawString(x, y0-j*9, rnd.choice('0101ACEOPS<>/{}[]'))
+            c.drawString(x, y0-j*9, stream[(start+j) % len(stream)])
+    c.setFont('DVMonoBold', 5.2)
+    for _ in range(5):
+        c.setFillAlpha(rnd.uniform(.035, .075))
+        c.setFillColor(GREEN)
+        c.drawString(rnd.randint(8, int(PAGE_W)-90), rnd.randint(40, int(PAGE_H)-35), rnd.choice(('ACE//TECH','<ACE_TECH/>','ACE::TECH','{ACE TECH}')))
     c.setFillAlpha(1)
     c.setStrokeColor(LINE)
     c.setLineWidth(.6)
