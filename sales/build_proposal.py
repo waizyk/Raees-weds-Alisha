@@ -17,15 +17,15 @@ OUT = Path(__file__).with_name('Ace-Tech-Private-Wedding-Proposal.pdf')
 PAGE_W, PAGE_H = A4
 M = 18 * mm
 
-BLACK = colors.HexColor('#050806')
-PANEL = colors.HexColor('#0A100D')
-PANEL_2 = colors.HexColor('#0E1712')
-GREEN = colors.HexColor('#00F58A')
-GREEN_2 = colors.HexColor('#65FFB3')
-MUTED = colors.HexColor('#93A69B')
-WHITE = colors.HexColor('#F2FFF8')
-LINE = colors.HexColor('#1D3A2B')
-SOFT = colors.HexColor('#BBD0C3')
+BLACK = colors.HexColor('#07100C')
+PANEL = colors.HexColor('#101C16')
+PANEL_2 = colors.HexColor('#16251D')
+GREEN = colors.HexColor('#18D889')
+GREEN_2 = colors.HexColor('#D8BE83')
+MUTED = colors.HexColor('#AAB8AF')
+WHITE = colors.HexColor('#FFF9EE')
+LINE = colors.HexColor('#294536')
+SOFT = colors.HexColor('#E4DED1')
 
 pdfmetrics.registerFont(TTFont('DVSans', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'))
 pdfmetrics.registerFont(TTFont('DVSansBold', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'))
@@ -35,8 +35,8 @@ pdfmetrics.registerFont(TTFont('DVMonoBold', '/usr/share/fonts/truetype/dejavu/D
 
 styles = getSampleStyleSheet()
 styles.add(ParagraphStyle(name='Kicker', fontName='DVMonoBold', fontSize=8, leading=11, textColor=GREEN, tracking=2.4, spaceAfter=5*mm, uppercase=True))
-styles.add(ParagraphStyle(name='TitleDark', fontName='DVSansBold', fontSize=28, leading=32, textColor=WHITE, spaceAfter=5*mm))
-styles.add(ParagraphStyle(name='H1Dark', fontName='DVSansBold', fontSize=22, leading=26, textColor=WHITE, spaceAfter=5*mm))
+styles.add(ParagraphStyle(name='TitleDark', fontName='DVSerif', fontSize=28, leading=32, textColor=WHITE, spaceAfter=5*mm))
+styles.add(ParagraphStyle(name='H1Dark', fontName='DVSerif', fontSize=22, leading=26, textColor=WHITE, spaceAfter=5*mm))
 styles.add(ParagraphStyle(name='H2Dark', fontName='DVSansBold', fontSize=14, leading=18, textColor=GREEN_2, spaceBefore=2*mm, spaceAfter=3*mm))
 styles.add(ParagraphStyle(name='H3Dark', fontName='DVMonoBold', fontSize=10, leading=14, textColor=WHITE, spaceAfter=2*mm))
 styles.add(ParagraphStyle(name='BodyDark', fontName='DVSans', fontSize=9.1, leading=14, textColor=SOFT, spaceAfter=3*mm))
@@ -44,7 +44,7 @@ styles.add(ParagraphStyle(name='SmallDark', fontName='DVSans', fontSize=7.5, lea
 styles.add(ParagraphStyle(name='MonoSmall', fontName='DVMono', fontSize=7.3, leading=10, textColor=GREEN_2))
 styles.add(ParagraphStyle(name='Price', fontName='DVMonoBold', fontSize=23, leading=27, textColor=GREEN, alignment=TA_RIGHT))
 styles.add(ParagraphStyle(name='CoverBrand', fontName='DVMonoBold', fontSize=34, leading=38, textColor=GREEN))
-styles.add(ParagraphStyle(name='CoverTitle', fontName='DVSansBold', fontSize=30, leading=35, textColor=WHITE, spaceAfter=5*mm))
+styles.add(ParagraphStyle(name='CoverTitle', fontName='DVSerif', fontSize=30, leading=35, textColor=WHITE, spaceAfter=5*mm))
 styles.add(ParagraphStyle(name='CoverSub', fontName='DVSerif', fontSize=15, leading=22, textColor=SOFT))
 styles.add(ParagraphStyle(name='Footer', fontName='DVMono', fontSize=6.5, textColor=MUTED))
 styles.add(ParagraphStyle(name='CenterSmall', fontName='DVSans', fontSize=8.5, leading=13, textColor=SOFT, alignment=TA_CENTER))
@@ -55,32 +55,38 @@ def matrix_background(c: Canvas, doc):
     c.setFillColor(BLACK)
     c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
     rnd = random.Random(180 + doc.page)
-    c.setFont('DVMono', 5.5)
-    matrix_streams = (
-        'ACE TECH 01<>[]{}//',
-        'ACE//TECH 1010<>',
-        '<ACE_TECH/> 0101',
-        '{ACE:TECH} []01',
-        'ACE OPS // ACE TECH',
-        '01ACE01TECH10<>',
-    )
-    for x in range(7, int(PAGE_W), 18):
-        if rnd.random() < .52:
-            continue
-        y0 = rnd.randint(60, int(PAGE_H)-40)
+
+    # Ace Tech code remains a recognisable signature, but is kept to the page edges
+    # so the proposal feels romantic and premium rather than aggressively technical.
+    matrix_streams = ('ACE TECH 01<>[]{}//', 'ACE//TECH 1010<>', '<ACE_TECH/> 0101', '{ACE:TECH} []01')
+    c.setFont('DVMono', 5.2)
+    edge_columns = list(range(7, 57, 16)) + list(range(int(PAGE_W)-53, int(PAGE_W)-5, 16))
+    for x in edge_columns:
+        y0 = rnd.randint(90, int(PAGE_H)-45)
         stream = rnd.choice(matrix_streams)
-        start = rnd.randrange(len(stream))
-        length = rnd.randint(8, 20)
-        for j in range(length):
-            alpha = max(.025, .15 - j*.007)
-            c.setFillAlpha(alpha)
+        start_at = rnd.randrange(len(stream))
+        for j in range(rnd.randint(10, 21)):
+            c.setFillAlpha(max(.018, .09-j*.0035))
             c.setFillColor(GREEN)
-            c.drawString(x, y0-j*9, stream[(start+j) % len(stream)])
+            c.drawString(x, y0-j*9, stream[(start_at+j) % len(stream)])
+
+    # Champagne arches suggest rings, ceremony and continuity without using clichés.
+    c.setFillAlpha(.11)
+    c.setStrokeColor(GREEN_2)
+    c.setLineWidth(.7)
+    c.arc(PAGE_W-74*mm, PAGE_H-70*mm, PAGE_W+18*mm, PAGE_H+22*mm, 185, 140)
+    c.arc(PAGE_W-65*mm, PAGE_H-61*mm, PAGE_W+9*mm, PAGE_H+13*mm, 185, 140)
+    c.setFillAlpha(.055)
+    c.circle(PAGE_W-27*mm, 52*mm, 31*mm, fill=0, stroke=1)
+    c.circle(PAGE_W-19*mm, 45*mm, 24*mm, fill=0, stroke=1)
+
+    # Small horizontal brand fragments reward closer inspection.
     c.setFont('DVMonoBold', 5.2)
-    for _ in range(5):
-        c.setFillAlpha(rnd.uniform(.035, .075))
+    for _ in range(3):
+        c.setFillAlpha(rnd.uniform(.025, .05))
         c.setFillColor(GREEN)
-        c.drawString(rnd.randint(8, int(PAGE_W)-90), rnd.randint(40, int(PAGE_H)-35), rnd.choice(('ACE//TECH','<ACE_TECH/>','ACE::TECH','{ACE TECH}')))
+        c.drawString(rnd.choice((8*mm, PAGE_W-48*mm)), rnd.randint(55, int(PAGE_H)-55), rnd.choice(('ACE//TECH','<ACE_TECH/>','{ACE TECH}')))
+
     c.setFillAlpha(1)
     c.setStrokeColor(LINE)
     c.setLineWidth(.6)
@@ -88,6 +94,7 @@ def matrix_background(c: Canvas, doc):
     c.setFont('DVMono', 6.5)
     c.setFillColor(MUTED)
     c.drawString(M, 9.5*mm, 'ACE//TECH  •  POWERED BY ACE OPS')
+    c.setFillColor(GREEN_2)
     c.drawRightString(PAGE_W-M, 9.5*mm, f'PRIVATE WEDDING PROPOSAL  •  {doc.page:02d}')
     c.restoreState()
 
@@ -140,8 +147,8 @@ story = []
 
 # Cover
 story += [Spacer(1, 20*mm), P('ACE//TECH', 'CoverBrand'), P('POWERED BY ACE OPS', 'Kicker'), Spacer(1, 12*mm)]
-story += [P('A private digital home<br/>for an unforgettable wedding.', 'CoverTitle')]
-story += [P('Custom wedding experience proposal', 'CoverSub'), Spacer(1, 15*mm)]
+story += [P('One beautiful place for<br/>every guest and every memory.', 'CoverTitle')]
+story += [P('A private digital wedding experience, thoughtfully made for two', 'CoverSub'), Spacer(1, 15*mm)]
 cover_box = Table([
     [P('PREPARED FOR', 'MonoSmall'), P('Private Wedding Client', 'H2Dark')],
     [P('PROPOSAL DATE', 'MonoSmall'), P('26 September 2026', 'BodyDark')],
@@ -149,18 +156,18 @@ cover_box = Table([
     [P('CONTACT', 'MonoSmall'), P('https.khan.sa@gmail.com', 'BodyDark')],
 ], colWidths=[45*mm, 110*mm])
 cover_box.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),1,GREEN),('INNERGRID',(0,0),(-1,-1),.4,LINE),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-story += [cover_box, Spacer(1, 25*mm), P('ELEGANT EXPERIENCES. ENGINEERED PRECISELY.', 'Kicker'), PageBreak()]
+story += [cover_box, Spacer(1, 25*mm), P('BEAUTIFULLY PERSONAL. QUIETLY POWERFUL.', 'Kicker'), PageBreak()]
 
 # Executive overview
-story += section_header('01 // The vision', 'Your wedding, translated into a private digital experience.', 'Ace Tech will design and configure a refined wedding platform that feels personal to the couple, effortless for guests and powerful behind the scenes.')
+story += section_header('01 // The vision', 'Let every guest feel personally welcomed.', 'Your guests should feel the care behind the celebration from their very first tap. Ace Tech brings the invitation, RSVP, private details and lasting memories together in one elegant experience.')
 vision_cols = Table([
-    [panel([P('FOR THE COUPLE','H3Dark'),P('A distinctive digital invitation and wedding home that reflects the couple’s identity, culture and celebration.','SmallDark')], widths=[79*mm], pad=10),
-     panel([P('FOR THE GUESTS','H3Dark'),P('One simple link for the invitation, RSVP, event details, memories and family experience.','SmallDark')], widths=[79*mm], pad=10)],
-    [panel([P('FOR THE HOSTS','H3Dark'),P('A secure private console for guest responses, seating, check-in, media and content management.','SmallDark')], widths=[79*mm], pad=10),
-     panel([P('AFTER THE DAY','H3Dark'),P('A lasting, downloadable archive instead of a temporary collection of disconnected tools.','SmallDark')], widths=[79*mm], pad=10)],
+    [panel([P('FOR THE COUPLE','H3Dark'),P('A wedding home that feels unmistakably yours—your names, traditions, colours and story.','SmallDark')], widths=[79*mm], pad=10),
+     panel([P('FOR THE GUESTS','H3Dark'),P('One personal link, a warm welcome and no uncertainty about what to do next.','SmallDark')], widths=[79*mm], pad=10)],
+    [panel([P('FOR THE HOSTS','H3Dark'),P('Less chasing, fewer spreadsheets and a clear private view of every response and detail.','SmallDark')], widths=[79*mm], pad=10),
+     panel([P('AFTER THE DAY','H3Dark'),P('A beautiful digital keepsake that can be downloaded and revisited long after the celebration.','SmallDark')], widths=[79*mm], pad=10)],
 ], colWidths=[83*mm,83*mm], rowHeights=[37*mm,37*mm])
 vision_cols.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),2),('RIGHTPADDING',(0,0),(-1,-1),2),('TOPPADDING',(0,0),(-1,-1),2),('BOTTOMPADDING',(0,0),(-1,-1),2)]))
-story += [vision_cols, Spacer(1, 7*mm), panel([P('THE ACE TECH DIFFERENCE','H2Dark'),P('This is not a generic RSVP form placed behind a template. It is a coordinated guest journey: personalised invitation, controlled access, beautifully presented information and a private management system—all designed as one experience.','BodyDark')], pad=14, border=GREEN), PageBreak()]
+story += [vision_cols, Spacer(1, 7*mm), panel([P('THE ACE TECH DIFFERENCE','H2Dark'),P('This is more than a form behind a template. It is the feeling of being personally invited, the reassurance of clear information and the joy of preserving the day—all designed as one seamless experience.','BodyDark')], pad=14, border=GREEN), PageBreak()]
 
 # Deliverables
 story += section_header('02 // Experience', 'What the complete wedding platform can include.')
@@ -185,7 +192,7 @@ ft.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,
 story += [ft, Spacer(1,5*mm), P('Final functionality is confirmed during discovery. Features not listed in the selected package are quoted separately before work begins.','SmallDark'), PageBreak()]
 
 # Package comparison
-story += section_header('03 // Investment', 'Choose the level of experience and support.', 'All pricing is in South African rand. The Signature Celebration is recommended for a fully customised private wedding.')
+story += section_header('03 // Investment', 'Choose how much of the experience you would like us to carry.', 'All pricing is in South African rand. The Signature Celebration is recommended for a fully customised private wedding.')
 comparison = [
     [P('CAPABILITY','MonoSmall'),P('CLASSIC ELEGANCE','MonoSmall'),P('SIGNATURE CELEBRATION','MonoSmall'),P('BLACK TIE EXPERIENCE','MonoSmall')],
     ['Custom styling','Template-tailored','Fully customised','Original art direction'],
@@ -202,11 +209,11 @@ comparison = [
 ]
 ct=Table([[Paragraph(str(c), styles['SmallDark']) if not hasattr(c,'wrap') else c for c in row] for row in comparison], colWidths=[58*mm,35*mm,36*mm,39*mm], repeatRows=1)
 ct.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PANEL_2),('BACKGROUND',(2,1),(2,-1),colors.HexColor('#0B1912')),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('TEXTCOLOR',(0,0),(-1,-1),SOFT),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-story += [ct, Spacer(1,6*mm), panel([P('RECOMMENDED // SIGNATURE CELEBRATION','H2Dark'),P('The strongest balance of custom design, guest experience, Host control and long-term value for a private wedding client.','BodyDark')], pad=13, border=GREEN), PageBreak()]
+story += [ct, Spacer(1,6*mm), panel([P('RECOMMENDED // SIGNATURE CELEBRATION','H2Dark'),P('The couple’s favourite balance: fully custom design, effortless guest communication and all the Host controls that remove unnecessary wedding admin.','BodyDark')], pad=13, border=GREEN), PageBreak()]
 
 # Three package details
-story += section_header('04 // Packages', 'Classic Elegance', 'A polished private wedding website for clients who need the core invitation and RSVP experience.')
-story += [package_card('Classic Elegance','CORE EXPERIENCE','R 5,500','A refined starting point with the important guest-facing journey configured by Ace Tech.',[
+story += section_header('04 // Packages', 'Classic Elegance', 'A graceful digital invitation and RSVP experience with everything needed to welcome guests beautifully.')
+story += [package_card('Classic Elegance','CORE EXPERIENCE','R 5,500','A refined beginning for couples who want the essentials to feel polished, personal and easy.',[
     'Tailored colour, typography and couple details using one established design direction',
     'Personalised invitation links with names, codes and party limits',
     'Wedding details, proceedings and privacy-aware venue information',
@@ -218,8 +225,8 @@ story += [package_card('Classic Elegance','CORE EXPERIENCE','R 5,500','A refined
 ])]
 story += [Spacer(1,6*mm),P('Best for: intimate weddings, Nikah-only events and couples who need a professional digital alternative to forms and static invitation images.','BodyDark'),PageBreak()]
 
-story += section_header('05 // Recommended', 'Signature Celebration', 'A fully customised wedding platform with the planning and guest-management features that make the product exceptional.')
-story += [package_card('Signature Celebration','MOST POPULAR','R 9,500','Designed around the couple’s wedding identity and configured as a complete private celebration platform.',[
+story += section_header('05 // Recommended', 'Signature Celebration', 'A fully customised celebration experience designed to delight guests and lighten the couple’s planning load.')
+story += [package_card('Signature Celebration','MOST POPULAR','R 9,500','Created around the couple’s identity, with the thoughtful details that make guests feel considered from invitation to wedding day.',[
     'Custom visual direction across the invitation, public pages and Host Console',
     'Personalised WhatsApp-ready invitations and custom opening experience',
     'Complete RSVP approval, guest messages and page-specific CSV exports',
@@ -232,8 +239,8 @@ story += [package_card('Signature Celebration','MOST POPULAR','R 9,500','Designe
 ],accent=True)]
 story += [Spacer(1,6*mm),panel([P('PRIVATE CLIENT BONUS','H3Dark'),P('If accepted within the proposal-validity period, Ace Tech will include the first downloadable post-wedding archive and a custom RA-style couple monogram at no additional charge.','SmallDark')],pad=11,border=GREEN),PageBreak()]
 
-story += section_header('06 // Bespoke', 'Black Tie Experience', 'For a high-touch celebration requiring original creative direction, expanded capacity and concierge implementation.')
-story += [package_card('Black Tie Experience','CONCIERGE BUILD','R 14,000','A premium production for clients who want Ace Tech to manage the digital experience from concept through post-event handover.',[
+story += section_header('06 // Bespoke', 'Black Tie Experience', 'For couples who want a distinctive, high-touch digital celebration with concierge implementation and a keepsake to keep forever.')
+story += [package_card('Black Tie Experience','CONCIERGE BUILD','R 14,000','Our most complete experience: original creative direction, concierge preparation and a permanent downloadable keepsake after the wedding.',[
     'Original design concept and advanced interaction direction',
     'Concierge guest-list import and invitation configuration',
     'Customised guest demo video plus a separate Host handover walkthrough video',
@@ -266,7 +273,7 @@ at.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),
 story += [at,PageBreak()]
 
 # Process
-story += section_header('08 // Delivery', 'A clear route from consultation to launch.')
+story += section_header('08 // Delivery', 'A calm, guided journey from first conversation to guest launch.')
 process = [
     ('01','DISCOVERY','Wedding style, cultural requirements, guest journey, privacy needs and package selection.'),
     ('02','CONTENT','Client supplies approved wording, event details, guest list, photographs and family information.'),
@@ -280,7 +287,7 @@ pt.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),
 story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Classic:</b> 1–2 weeks &nbsp;&nbsp; <b>Signature:</b> 2–3 weeks &nbsp;&nbsp; <b>Black Tie:</b> 3–4 weeks', 'BodyDark'),P('Timelines begin only after the deposit, discovery and all minimum required content are received. Client approval delays, new scope and third-party delays extend the delivery date accordingly.','SmallDark'),Spacer(1,3*mm),P('<b>PLANNING BUFFER:</b> Reserve the project 8–12 weeks before the wedding. A standard build should kick off no later than 6 weeks before the wedding, with target public launch 2–3 weeks before the event. Bookings inside the six-week window are treated as rush work and attract the stated surcharge, subject to availability.','SmallDark')],pad=12,border=GREEN),PageBreak()]
 
 # Terms
-story += section_header('09 // Commercial terms', 'Transparent terms protect the client and the project.')
+story += section_header('09 // Commercial terms', 'Clear promises create a confident beginning.')
 terms = [
     terms_row('PAYMENT','50% booking deposit is payable to reserve production capacity. The remaining 50% is payable after final client approval and before the website is made publicly accessible or guest invitations are released. Ace Tech is not obliged to launch until cleared payment is received.'),
     terms_row('VALIDITY','Standard proposal pricing is valid until 10 October 2026 and may be revised thereafter. The early-bird mechanism remains subject to written quotation validity, eligibility and production availability.'),
@@ -307,7 +314,7 @@ tt2.setStyle(terms_style)
 story += [tt2,Spacer(1,5*mm),panel([P('BINDING ACCEPTANCE','H3Dark'),P('These commercial terms, the accepted proposal, the final statement of work and the invoice together form the agreement between the client and Ace Tech. By signing below or paying the booking deposit, the client confirms acceptance and intends to be legally bound. If documents conflict, the signed statement of work takes priority. Nothing in these terms excludes rights that cannot lawfully be excluded under South African law.','SmallDark')],pad=10,border=GREEN),PageBreak()]
 
 # Close
-story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Celebration<br/><font color="#00F58A">Early-bird Black Tie: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
+story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s make the first<br/>moment feel unforgettable.', 'CoverTitle'),P('Recommended selection: Signature Celebration<br/><font color="#00F58A">Early-bird Black Tie: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
