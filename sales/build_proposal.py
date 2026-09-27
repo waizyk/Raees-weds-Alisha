@@ -70,11 +70,24 @@ def matrix_background(c: Canvas, doc):
             c.setFillColor(GREEN)
             c.drawString(x, y0-j*9, stream[(start_at+j) % len(stream)])
 
-    # One restrained champagne arc adds warmth without competing with the content.
-    c.setFillAlpha(.045)
+    # A restrained Art Deco corner detail adds structure and wedding luxury.
+    c.setFillAlpha(.13)
     c.setStrokeColor(GREEN_2)
     c.setLineWidth(.55)
-    c.arc(PAGE_W-70*mm, PAGE_H-66*mm, PAGE_W+14*mm, PAGE_H+18*mm, 190, 125)
+    corner_x = PAGE_W - 18*mm
+    corner_y = PAGE_H - 18*mm
+    c.line(corner_x-32*mm, corner_y, corner_x, corner_y)
+    c.line(corner_x, corner_y, corner_x, corner_y-21*mm)
+    c.setLineWidth(.35)
+    c.line(corner_x-27*mm, corner_y-2.2*mm, corner_x-2.2*mm, corner_y-2.2*mm)
+    c.line(corner_x-2.2*mm, corner_y-2.2*mm, corner_x-2.2*mm, corner_y-17*mm)
+    diamond = c.beginPath()
+    diamond.moveTo(corner_x-35*mm, corner_y)
+    diamond.lineTo(corner_x-32.5*mm, corner_y+2.5*mm)
+    diamond.lineTo(corner_x-30*mm, corner_y)
+    diamond.lineTo(corner_x-32.5*mm, corner_y-2.5*mm)
+    diamond.close()
+    c.drawPath(diamond, fill=0, stroke=1)
 
     # Small horizontal brand fragments reward closer inspection.
     c.setFont('DVMonoBold', 5.2)
