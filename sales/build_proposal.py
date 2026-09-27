@@ -170,9 +170,9 @@ ft.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,
 story += [ft, Spacer(1,5*mm), P('Final functionality is confirmed during discovery. Features not listed in the selected package are quoted separately before work begins.','SmallDark'), PageBreak()]
 
 # Package comparison
-story += section_header('03 // Investment', 'Choose the level of experience and support.', 'All pricing is in South African rand. The Signature Experience is recommended for a fully customised private wedding.')
+story += section_header('03 // Investment', 'Choose the level of experience and support.', 'All pricing is in South African rand. The Signature Celebration is recommended for a fully customised private wedding.')
 comparison = [
-    [P('CAPABILITY','MonoSmall'),P('ESSENTIAL','MonoSmall'),P('SIGNATURE','MonoSmall'),P('BLACK TIE','MonoSmall')],
+    [P('CAPABILITY','MonoSmall'),P('CLASSIC ELEGANCE','MonoSmall'),P('SIGNATURE CELEBRATION','MonoSmall'),P('BLACK TIE EXPERIENCE','MonoSmall')],
     ['Custom styling','Template-tailored','Fully customised','Original art direction'],
     ['Invited guests','Up to 100','Up to 250','Up to 500'],
     ['Personal invitation + RSVP','Included','Included','Included'],
@@ -187,11 +187,11 @@ comparison = [
 ]
 ct=Table([[Paragraph(str(c), styles['SmallDark']) if not hasattr(c,'wrap') else c for c in row] for row in comparison], colWidths=[58*mm,35*mm,36*mm,39*mm], repeatRows=1)
 ct.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PANEL_2),('BACKGROUND',(2,1),(2,-1),colors.HexColor('#0B1912')),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('TEXTCOLOR',(0,0),(-1,-1),SOFT),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-story += [ct, Spacer(1,6*mm), panel([P('RECOMMENDED // SIGNATURE EXPERIENCE','H2Dark'),P('The strongest balance of custom design, guest experience, Host control and long-term value for a private wedding client.','BodyDark')], pad=13, border=GREEN), PageBreak()]
+story += [ct, Spacer(1,6*mm), panel([P('RECOMMENDED // SIGNATURE CELEBRATION','H2Dark'),P('The strongest balance of custom design, guest experience, Host control and long-term value for a private wedding client.','BodyDark')], pad=13, border=GREEN), PageBreak()]
 
 # Three package details
-story += section_header('04 // Packages', 'Essential Wedding', 'A polished private wedding website for clients who need the core invitation and RSVP experience.')
-story += [package_card('Essential Wedding','CORE EXPERIENCE','R 5,500','A refined starting point with the important guest-facing journey configured by Ace Tech.',[
+story += section_header('04 // Packages', 'Classic Elegance', 'A polished private wedding website for clients who need the core invitation and RSVP experience.')
+story += [package_card('Classic Elegance','CORE EXPERIENCE','R 5,500','A refined starting point with the important guest-facing journey configured by Ace Tech.',[
     'Tailored colour, typography and couple details using one established design direction',
     'Personalised invitation links with names, codes and party limits',
     'Wedding details, proceedings and privacy-aware venue information',
@@ -203,8 +203,8 @@ story += [package_card('Essential Wedding','CORE EXPERIENCE','R 5,500','A refine
 ])]
 story += [Spacer(1,6*mm),P('Best for: intimate weddings, Nikah-only events and couples who need a professional digital alternative to forms and static invitation images.','BodyDark'),PageBreak()]
 
-story += section_header('05 // Recommended', 'Signature Wedding Experience', 'A fully customised wedding platform with the planning and guest-management features that make the product exceptional.')
-story += [package_card('Signature Wedding Experience','MOST POPULAR','R 9,500','Designed around the couple’s wedding identity and configured as a complete private celebration platform.',[
+story += section_header('05 // Recommended', 'Signature Celebration', 'A fully customised wedding platform with the planning and guest-management features that make the product exceptional.')
+story += [package_card('Signature Celebration','MOST POPULAR','R 9,500','Designed around the couple’s wedding identity and configured as a complete private celebration platform.',[
     'Custom visual direction across the invitation, public pages and Host Console',
     'Personalised WhatsApp-ready invitations and custom opening experience',
     'Complete RSVP approval, guest messages and page-specific CSV exports',
@@ -217,8 +217,8 @@ story += [package_card('Signature Wedding Experience','MOST POPULAR','R 9,500','
 ],accent=True)]
 story += [Spacer(1,6*mm),panel([P('PRIVATE CLIENT BONUS','H3Dark'),P('If accepted within the proposal-validity period, Ace Tech will include the first downloadable post-wedding archive and a custom RA-style couple monogram at no additional charge.','SmallDark')],pad=11,border=GREEN),PageBreak()]
 
-story += section_header('06 // Bespoke', 'Black Tie Wedding Experience', 'For a high-touch celebration requiring original creative direction, expanded capacity and concierge implementation.')
-story += [package_card('Black Tie Wedding Experience','CONCIERGE BUILD','R 14,000','A premium production for clients who want Ace Tech to manage the digital experience from concept through post-event handover.',[
+story += section_header('06 // Bespoke', 'Black Tie Experience', 'For a high-touch celebration requiring original creative direction, expanded capacity and concierge implementation.')
+story += [package_card('Black Tie Experience','CONCIERGE BUILD','R 14,000','A premium production for clients who want Ace Tech to manage the digital experience from concept through post-event handover.',[
     'Original design concept and advanced interaction direction',
     'Concierge guest-list import and invitation configuration',
     'Customised guest demo video plus a separate Host handover walkthrough video',
@@ -262,7 +262,7 @@ process = [
 ]
 pt = Table([[P(n,'Price'),P(t,'H3Dark'),P(d,'SmallDark')] for n,t,d in process], colWidths=[18*mm,42*mm,108*mm])
 pt.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Essential:</b> 1–2 weeks &nbsp;&nbsp; <b>Signature:</b> 2–3 weeks &nbsp;&nbsp; <b>Black Tie:</b> 3–4 weeks', 'BodyDark'),P('Timelines begin only after the deposit, discovery and all minimum required content are received. Client approval delays, new scope and third-party delays extend the delivery date accordingly.','SmallDark'),Spacer(1,3*mm),P('<b>PLANNING BUFFER:</b> Reserve the project 8–12 weeks before the wedding. A standard build should kick off no later than 6 weeks before the wedding, with target public launch 2–3 weeks before the event. Bookings inside the six-week window are treated as rush work and attract the stated surcharge, subject to availability.','SmallDark')],pad=12,border=GREEN),PageBreak()]
+story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Classic:</b> 1–2 weeks &nbsp;&nbsp; <b>Signature:</b> 2–3 weeks &nbsp;&nbsp; <b>Black Tie:</b> 3–4 weeks', 'BodyDark'),P('Timelines begin only after the deposit, discovery and all minimum required content are received. Client approval delays, new scope and third-party delays extend the delivery date accordingly.','SmallDark'),Spacer(1,3*mm),P('<b>PLANNING BUFFER:</b> Reserve the project 8–12 weeks before the wedding. A standard build should kick off no later than 6 weeks before the wedding, with target public launch 2–3 weeks before the event. Bookings inside the six-week window are treated as rush work and attract the stated surcharge, subject to availability.','SmallDark')],pad=12,border=GREEN),PageBreak()]
 
 # Terms
 story += section_header('09 // Commercial terms', 'Transparent terms protect the client and the project.')
@@ -292,7 +292,7 @@ tt2.setStyle(terms_style)
 story += [tt2,Spacer(1,5*mm),panel([P('BINDING ACCEPTANCE','H3Dark'),P('These commercial terms, the accepted proposal, the final statement of work and the invoice together form the agreement between the client and Ace Tech. By signing below or paying the booking deposit, the client confirms acceptance and intends to be legally bound. If documents conflict, the signed statement of work takes priority. Nothing in these terms excludes rights that cannot lawfully be excluded under South African law.','SmallDark')],pad=10,border=GREEN),PageBreak()]
 
 # Close
-story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Wedding Experience<br/><font color="#00F58A">Early-bird Black Tie: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
+story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Celebration<br/><font color="#00F58A">Early-bird Black Tie: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
