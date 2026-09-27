@@ -172,7 +172,7 @@ story += [ft, Spacer(1,5*mm), P('Final functionality is confirmed during discove
 # Package comparison
 story += section_header('03 // Investment', 'Choose the level of experience and support.', 'All pricing is in South African rand. The Signature Experience is recommended for a fully customised private wedding.')
 comparison = [
-    [P('CAPABILITY','MonoSmall'),P('ESSENTIAL','MonoSmall'),P('SIGNATURE','MonoSmall'),P('BLACK LABEL','MonoSmall')],
+    [P('CAPABILITY','MonoSmall'),P('ESSENTIAL','MonoSmall'),P('SIGNATURE','MonoSmall'),P('BLACK TIE','MonoSmall')],
     ['Custom styling','Template-tailored','Fully customised','Original art direction'],
     ['Invited guests','Up to 100','Up to 250','Up to 500'],
     ['Personal invitation + RSVP','Included','Included','Included'],
@@ -217,8 +217,8 @@ story += [package_card('Signature Wedding Experience','MOST POPULAR','R 9,500','
 ],accent=True)]
 story += [Spacer(1,6*mm),panel([P('PRIVATE CLIENT BONUS','H3Dark'),P('If accepted within the proposal-validity period, Ace Tech will include the first downloadable post-wedding archive and a custom RA-style couple monogram at no additional charge.','SmallDark')],pad=11,border=GREEN),PageBreak()]
 
-story += section_header('06 // Bespoke', 'Black Label Wedding', 'For a high-touch celebration requiring original creative direction, expanded capacity and concierge implementation.')
-story += [package_card('Black Label Wedding','CONCIERGE BUILD','R 14,000','A premium production for clients who want Ace Tech to manage the digital experience from concept through post-event handover.',[
+story += section_header('06 // Bespoke', 'Black Tie Wedding Experience', 'For a high-touch celebration requiring original creative direction, expanded capacity and concierge implementation.')
+story += [package_card('Black Tie Wedding Experience','CONCIERGE BUILD','R 14,000','A premium production for clients who want Ace Tech to manage the digital experience from concept through post-event handover.',[
     'Original design concept and advanced interaction direction',
     'Concierge guest-list import and invitation configuration',
     'Customised guest demo video plus a separate Host handover walkthrough video',
@@ -230,7 +230,7 @@ story += [package_card('Black Label Wedding','CONCIERGE BUILD','R 14,000','A pre
     'Forever Download: the complete archive, including up to 30 GB of media, supplied as a downloadable copy to keep indefinitely',
     'Sixty-day priority post-event support and archive handover assistance',
 ])]
-story += [Spacer(1,5*mm),panel([P('EARLY-BIRD BLACK LABEL // R 12,500','H2Dark'),P('Save R 1,500 when the signed agreement and booking deposit are received at least six calendar months before the confirmed wedding date. Subject to production availability and the scope remaining within the Black Label package.','SmallDark')],pad=10,border=GREEN),Spacer(1,3*mm),P('* Standard Black Label price is R 14,000. Physical event staffing, travel, paid messaging, ticketing, livestreaming and third-party licences are not included unless specifically added to the quotation.','SmallDark'),PageBreak()]
+story += [Spacer(1,5*mm),panel([P('EARLY-BIRD BLACK TIE // R 12,500','H2Dark'),P('Save R 1,500 when the signed agreement and booking deposit are received at least six calendar months before the confirmed wedding date. Subject to production availability and the scope remaining within the Black Tie package.','SmallDark')],pad=10,border=GREEN),Spacer(1,3*mm),P('* Standard Black Tie price is R 14,000. Physical event staffing, travel, paid messaging, ticketing, livestreaming and third-party licences are not included unless specifically added to the quotation.','SmallDark'),PageBreak()]
 
 # Add-ons
 story += section_header('07 // Optional upgrades', 'Build the exact service level required.', 'Add-ons may be selected before production or approved later through a written change request.')
@@ -241,7 +241,7 @@ addons = [
     ('Additional 5 GB media storage','R 450','Added storage allocation for the active hosting period.'),
     ('Additional design revision round','R 750','One consolidated revision after the included rounds are complete.'),
     ('On-site check-in support','From R 3,500','Durban-area attendance support. Travel, accommodation and extra devices quoted separately.'),
-    ('Digital archive renewal','R 650 / year','Optional continued online archive after included hosting ends; subject to standard storage limits. The Black Label downloadable archive remains the client’s to keep forever without renewal.'),
+    ('Digital archive renewal','R 650 / year','Optional continued online archive after included hosting ends; subject to standard storage limits. The Black Tie downloadable archive remains the client’s to keep forever without renewal.'),
     ('Rush build / compressed lead time','+25%','Applies when booking fewer than six weeks before the wedding or where launch is required in fewer than 10 business days. Feasibility depends on scope and complete, approved content.'),
     ('WhatsApp Business API integration','Quoted separately','Meta template approval, conversation fees and third-party provider costs are excluded.'),
     ('Additional bespoke functionality','R 950 / hour','Used only after a written estimate and client approval.'),
@@ -262,14 +262,14 @@ process = [
 ]
 pt = Table([[P(n,'Price'),P(t,'H3Dark'),P(d,'SmallDark')] for n,t,d in process], colWidths=[18*mm,42*mm,108*mm])
 pt.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Essential:</b> 1–2 weeks &nbsp;&nbsp; <b>Signature:</b> 2–3 weeks &nbsp;&nbsp; <b>Black Label:</b> 3–4 weeks', 'BodyDark'),P('Timelines begin only after the deposit, discovery and all minimum required content are received. Client approval delays, new scope and third-party delays extend the delivery date accordingly.','SmallDark'),Spacer(1,3*mm),P('<b>PLANNING BUFFER:</b> Reserve the project 8–12 weeks before the wedding. A standard build should kick off no later than 6 weeks before the wedding, with target public launch 2–3 weeks before the event. Bookings inside the six-week window are treated as rush work and attract the stated surcharge, subject to availability.','SmallDark')],pad=12,border=GREEN),PageBreak()]
+story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Essential:</b> 1–2 weeks &nbsp;&nbsp; <b>Signature:</b> 2–3 weeks &nbsp;&nbsp; <b>Black Tie:</b> 3–4 weeks', 'BodyDark'),P('Timelines begin only after the deposit, discovery and all minimum required content are received. Client approval delays, new scope and third-party delays extend the delivery date accordingly.','SmallDark'),Spacer(1,3*mm),P('<b>PLANNING BUFFER:</b> Reserve the project 8–12 weeks before the wedding. A standard build should kick off no later than 6 weeks before the wedding, with target public launch 2–3 weeks before the event. Bookings inside the six-week window are treated as rush work and attract the stated surcharge, subject to availability.','SmallDark')],pad=12,border=GREEN),PageBreak()]
 
 # Terms
 story += section_header('09 // Commercial terms', 'Transparent terms protect the client and the project.')
 terms = [
     terms_row('PAYMENT','50% booking deposit is payable to reserve production capacity. The remaining 50% is payable after final client approval and before the website is made publicly accessible or guest invitations are released. Ace Tech is not obliged to launch until cleared payment is received.'),
     terms_row('VALIDITY','Standard proposal pricing is valid until 10 October 2026 and may be revised thereafter. The early-bird mechanism remains subject to written quotation validity, eligibility and production availability.'),
-    terms_row('EARLY BIRD','The Black Label early-bird package price is R 12,500, a saving of R 1,500 from the R 14,000 standard price. Eligibility requires the signed agreement and cleared 50% booking deposit to be received at least six calendar months before the confirmed wedding date. The wedding date must be disclosed before acceptance. The offer cannot be combined with another discount and excludes add-ons, rush fees and third-party costs.'),
+    terms_row('EARLY BIRD','The Black Tie early-bird package price is R 12,500, a saving of R 1,500 from the R 14,000 standard price. Eligibility requires the signed agreement and cleared 50% booking deposit to be received at least six calendar months before the confirmed wedding date. The wedding date must be disclosed before acceptance. The offer cannot be combined with another discount and excludes add-ons, rush fees and third-party costs.'),
     terms_row('CURRENCY','All prices are in ZAR. VAT, if legally applicable, will be shown on the invoice.'),
     terms_row('CONTENT','The client supplies accurate names, dates, venue details, photographs and guest information with permission to use them.'),
     terms_row('REVISIONS','A revision round is one consolidated written feedback submission. New scope is quoted separately.'),
@@ -279,8 +279,8 @@ terms = [
     terms_row('PRIVACY','Ace Tech will use reasonable technical safeguards. The client controls guest-list accuracy, consent and authorised Host access.'),
     terms_row('THIRD PARTIES','Domain, payment, Meta/WhatsApp, SMS and other provider fees are excluded unless explicitly stated.'),
     terms_row('OWNERSHIP','The client owns supplied content and exported event data. Ace Tech retains its platform, reusable components and underlying source code.'),
-    terms_row('FOREVER DOWNLOAD','Black Label includes a downloadable post-wedding archive containing the completed website and up to 30 GB of included media. Once supplied, the client may download, copy and retain that archive indefinitely. This forever benefit applies to the downloadable copy only and does not include perpetual online storage, domain renewal or permanent hosting. The client is responsible for keeping backup copies after handover.'),
-    terms_row('ARCHIVE','Black Label includes 18 months of online hosting. Its 30 GB allocation applies during that included hosting period and is then supplied as part of the downloadable archive. After included hosting ends, any continued online availability is optional and subject to the applicable renewal fee, storage limits and third-party service availability.'),
+    terms_row('FOREVER DOWNLOAD','Black Tie includes a downloadable post-wedding archive containing the completed website and up to 30 GB of included media. Once supplied, the client may download, copy and retain that archive indefinitely. This forever benefit applies to the downloadable copy only and does not include perpetual online storage, domain renewal or permanent hosting. The client is responsible for keeping backup copies after handover.'),
+    terms_row('ARCHIVE','Black Tie includes 18 months of online hosting. Its 30 GB allocation applies during that included hosting period and is then supplied as part of the downloadable archive. After included hosting ends, any continued online availability is optional and subject to the applicable renewal fee, storage limits and third-party service availability.'),
 ]
 terms_style = TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('LEFTPADDING',(0,0),(-1,-1),9),('RIGHTPADDING',(0,0),(-1,-1),9),('TOPPADDING',(0,0),(-1,-1),8),('BOTTOMPADDING',(0,0),(-1,-1),8),('VALIGN',(0,0),(-1,-1),'TOP')])
 tt=Table(terms[:7],colWidths=[35*mm,133*mm])
@@ -292,7 +292,7 @@ tt2.setStyle(terms_style)
 story += [tt2,Spacer(1,5*mm),panel([P('BINDING ACCEPTANCE','H3Dark'),P('These commercial terms, the accepted proposal, the final statement of work and the invoice together form the agreement between the client and Ace Tech. By signing below or paying the booking deposit, the client confirms acceptance and intends to be legally bound. If documents conflict, the signed statement of work takes priority. Nothing in these terms excludes rights that cannot lawfully be excluded under South African law.','SmallDark')],pad=10,border=GREEN),PageBreak()]
 
 # Close
-story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Wedding Experience<br/><font color="#00F58A">Early-bird Black Label: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
+story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s create something<br/>your guests will remember.', 'CoverTitle'),P('Recommended selection: Signature Wedding Experience<br/><font color="#00F58A">Early-bird Black Tie: R 12,500 when booked 6+ months before the wedding.</font>', 'CoverSub'),Spacer(1,10*mm)]
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
