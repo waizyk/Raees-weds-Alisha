@@ -70,15 +70,11 @@ def matrix_background(c: Canvas, doc):
             c.setFillColor(GREEN)
             c.drawString(x, y0-j*9, stream[(start_at+j) % len(stream)])
 
-    # Champagne arches suggest rings, ceremony and continuity without using clichés.
-    c.setFillAlpha(.11)
+    # One restrained champagne arc adds warmth without competing with the content.
+    c.setFillAlpha(.045)
     c.setStrokeColor(GREEN_2)
-    c.setLineWidth(.7)
-    c.arc(PAGE_W-74*mm, PAGE_H-70*mm, PAGE_W+18*mm, PAGE_H+22*mm, 185, 140)
-    c.arc(PAGE_W-65*mm, PAGE_H-61*mm, PAGE_W+9*mm, PAGE_H+13*mm, 185, 140)
-    c.setFillAlpha(.055)
-    c.circle(PAGE_W-27*mm, 52*mm, 31*mm, fill=0, stroke=1)
-    c.circle(PAGE_W-19*mm, 45*mm, 24*mm, fill=0, stroke=1)
+    c.setLineWidth(.55)
+    c.arc(PAGE_W-70*mm, PAGE_H-66*mm, PAGE_W+14*mm, PAGE_H+18*mm, 190, 125)
 
     # Small horizontal brand fragments reward closer inspection.
     c.setFont('DVMonoBold', 5.2)
