@@ -150,9 +150,8 @@ function Details({ go, eventInfo }) {
   const s=eventInfo.settings;
   const proceedings=(eventInfo.proceedings||[]).filter(event=>event.is_visible!==false).sort((a,b)=>`${a.event_date||''} ${a.start_time||''}`.localeCompare(`${b.event_date||''} ${b.start_time||''}`));
   return <PageHero eyebrow="ORDER OF CELEBRATION" title={<>The days’<br/><em>proceedings.</em></>}>
-    <div className="proceedings-intro"><p className="eyebrow">A THOUGHTFUL NOTE</p><h3>Two meaningful days, shared with the people we love.</h3><p>{s.guest_note}</p>{s.contact_note&&<p>{s.contact_note}</p>}</div>
-    {proceedings.length>0?<div className="classic-proceeding-blocks">{proceedings.map((event,i)=>{const eventDate=new Date(`${event.event_date}T00:00:00`);const displayTitle=/nikah/i.test(event.title)?'Nikah':event.title;return <section className="classic-proceeding" key={event.id||i}>
-      <div className="classic-proceeding-heading"><p className="eyebrow">{String(i+1).padStart(2,'0')} · {eventDate.toLocaleDateString('en-GB',{weekday:'long'}).toUpperCase()}</p><h2>{displayTitle}</h2></div>
+    <div className="proceedings-intro"><p className="eyebrow">A THOUGHTFUL NOTE</p><h3>With grateful hearts, we invite you to share in both celebrations.</h3><p>{s.guest_note}</p>{s.contact_note&&<p>{s.contact_note}</p>}</div>
+    {proceedings.length>0?<div className="classic-proceeding-blocks">{proceedings.map((event,i)=>{const eventDate=new Date(`${event.event_date}T00:00:00`);const displayTitle=/nikah/i.test(event.title)?'Nikah':event.title;return <section className="classic-proceeding" aria-label={`${displayTitle} details`} key={event.id||i}>
       <div className="details-card">
         <div className="date-block"><small>{eventDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}</small><strong>{eventDate.getDate()}</strong><span>{eventDate.getFullYear()}</span></div>
         <div className="detail-lines">
