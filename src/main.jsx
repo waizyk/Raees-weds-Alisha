@@ -147,21 +147,19 @@ function Story() {
 }
 
 function Details({ go, eventInfo }) {
-  const s=eventInfo.settings; const date=new Date(`${s.event_date}T00:00:00`);
-  return <PageHero eyebrow="NIKAH & CELEBRATION" title={<>Join us as we begin<br/><em>our life together.</em></>}>
-    <div className="details-card">
-      <div className="date-block"><small>{date.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}</small><strong>{date.getDate()}</strong><span>{date.getFullYear()}</span></div>
-      <div className="detail-lines">
-        <div><Clock/><span><small>THE TIME</small><b>{formatTime(s.main_time)}</b><p>{eventInfo.proceedings?.[0]?.description||'Final timings will be shared soon'}</p></span></div>
-        <div><MapPin/><span><small>THE PLACE</small><b>{s.main_venue}</b><p>{s.city}, {s.country}{s.venue_private?' · Full details for invited guests':''}</p></span></div>
-        <div><Leaf/><span><small>THE ATTIRE</small><b>{s.attire}</b><p>{s.attire_note}</p></span></div>
-      </div>
-    </div>
-    {eventInfo.proceedings?.length>0&&<div className="proceedings"><p className="eyebrow">ORDER OF CELEBRATION</p><h2>The day’s proceedings</h2><div>{eventInfo.proceedings.map((event,i)=><article key={event.id||i}><span>{String(i+1).padStart(2,'0')}</span><div><small>{formatDate(event.event_date,{weekday:'long',day:'numeric',month:'long'})}</small><h3>{event.title}</h3><p><Clock/> {formatTime(event.start_time)}{event.end_time?` – ${formatTime(event.end_time)}`:''}</p><p><MapPin/> {event.venue_name}{event.address?` · ${event.address}`:''}</p>{event.description&&<p>{event.description}</p>}{event.attire&&<em>{event.attire}</em>}</div></article>)}</div></div>}
-    <div className="detail-note"><h3>A thoughtful note</h3><p>{s.guest_note}</p>{s.contact_note&&<p>{s.contact_note}</p>}<button className="button dark" onClick={() => go('rsvp')}>Respond to invitation <ArrowRight size={16}/></button></div>
+  const s=eventInfo.settings;
+  const proceedings=(eventInfo.proceedings||[]).filter(event=>event.is_visible!==false).sort((a,b)=>`${a.event_date||''} ${a.start_time||''}`.localeCompare(`${b.event_date||''} ${b.start_time||''}`));
+  return <PageHero eyebrow="ORDER OF CELEBRATION" title={<>The days’<br/><em>proceedings.</em></>}>
+    <div className="proceedings-intro"><p className="eyebrow">A THOUGHTFUL NOTE</p><h3>Two meaningful days, shared with the people we love.</h3><p>{s.guest_note}</p>{s.contact_note&&<p>{s.contact_note}</p>}</div>
+    {proceedings.length>0?<div className="featured-proceedings">{proceedings.map((event,i)=>{const displayTitle=/nikah/i.test(event.title)?'Nikah':event.title;return <article key={event.id||i}>
+      <header><span>{String(i+1).padStart(2,'0')}</span><div><small>{formatDate(event.event_date,{weekday:'long'})}</small><b>{formatDate(event.event_date,{day:'numeric',month:'long',year:'numeric'})}</b></div></header>
+      <h2>{displayTitle}</h2>
+      <div className="featured-event-details"><p><Clock/><span><small>THE TIME</small><b>{formatTime(event.start_time)}{event.end_time?` – ${formatTime(event.end_time)}`:''}</b></span></p><p><MapPin/><span><small>THE PLACE</small><b>{event.venue_name||'Venue to be confirmed'}</b>{event.address&&<em>{event.address}</em>}</span></p></div>
+      {event.description&&<p className="featured-event-description">{event.description}</p>}{event.attire&&<p className="featured-event-attire"><Leaf/> {event.attire}</p>}
+    </article>})}</div>:<div className="empty-list"><CalendarDays/><b>Proceedings will be shared soon</b></div>}
+    <div className="celebration-footer"><Leaf/><div><small>ATTIRE FOR THE CELEBRATION</small><h3>{s.attire}</h3><p>{s.attire_note}</p></div><button className="button dark" onClick={() => go('rsvp')}>Respond to invitation <ArrowRight size={16}/></button></div>
   </PageHero>;
 }
-
 function PageHero({ eyebrow, title, children }) {
   return <><section className="page-hero"><p className="eyebrow light">{eyebrow}</p><h1>{title}</h1><div className="page-ornament">愛</div></section><section className="page-content section">{children}</section></>;
 }
@@ -420,7 +418,7 @@ function LoginModal({close,success}){
 }
 function ResetPasswordModal({close,notify}){const [password,setPassword]=useState('');const [confirm,setConfirm]=useState('');const [error,setError]=useState('');const [busy,setBusy]=useState(false);const save=async()=>{if(password.length<8){setError('Use at least 8 characters.');return}if(password!==confirm){setError('The passwords do not match.');return}setBusy(true);try{await setNewPassword(password);notify('Your password has been updated');close();window.history.replaceState({},'',window.location.pathname);}catch(err){setError(err.message||'Unable to update password.');}finally{setBusy(false)}};return <div className="modal-backdrop"><div className="modal login-modal"><div className="modal-icon"><LockKeyhole/></div><p className="eyebrow">SECURE HOST ACCOUNT</p><h2>Choose a new password</h2><p>Use at least eight characters and keep it private.</p><input autoFocus type="password" placeholder="New password" value={password} onChange={e=>setPassword(e.target.value)}/><input type="password" placeholder="Confirm new password" value={confirm} onChange={e=>setConfirm(e.target.value)}/><button className="button dark wide" disabled={busy||!password||!confirm} onClick={save}>{busy?'Updating…':'Update password'} {!busy&&<Check/>}</button>{error&&<small className="error">{error}</small>}</div></div>}
 function InviteExperience({close,go,onVerified,eventInfo}){
-  const eventSettings=eventInfo.settings; const eventDate=new Date(`${eventSettings.event_date}T00:00:00`);
+  const eventSettings=eventInfo.settings; const inviteProceedings=(eventInfo.proceedings||[]).filter(event=>event.is_visible!==false&&event.event_date).sort((a,b)=>a.event_date.localeCompare(b.event_date)); const inviteDates=[...new Set(inviteProceedings.map(event=>event.event_date))]; const firstInviteDate=new Date(`${inviteDates[0]||eventSettings.event_date}T00:00:00`); const lastInviteDate=new Date(`${inviteDates.at(-1)||eventSettings.event_date}T00:00:00`); const inviteDayLabel=firstInviteDate.getDate()===lastInviteDate.getDate()?String(firstInviteDate.getDate()):`${firstInviteDate.getDate()}–${lastInviteDate.getDate()}`;
   const params = new URLSearchParams(window.location.search);
   const requestedNames = params.get('names') || params.get('family') || 'Honoured Guest';
   const inviteCode = params.get('invite') || '';
@@ -446,8 +444,8 @@ function InviteExperience({close,go,onVerified,eventInfo}){
             <p className="invite-bismillah">BISMILLĀHIR-RAḤMĀNIR-RAḤĪM</p>
             <p className="invite-kicker">TOGETHER WITH THEIR FAMILIES</p>
             <h2><span>Mohammed Raees Khan</span><em className="love-mark">&</em><span>Alisha Ahmed</span></h2>
-            <i>request the honour of your presence<br/>at their Nikah and wedding celebration</i>
-            <div className="invite-date"><b>{eventDate.getDate()}</b><span>{eventDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}<br/>{eventDate.getFullYear()}</span></div>
+            <i>request the honour of your presence at their</i><p className="invite-event-name">Nikah <span>and</span> Walima</p>
+            <div className="invite-date"><b>{inviteDayLabel}</b><span>{firstInviteDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}<br/>{firstInviteDate.getFullYear()}</span></div>
             <p className="invite-place">{eventSettings.city.toUpperCase()} · {eventSettings.country.toUpperCase()}</p>
             <p className="dua">May Allah bless this union with love, mercy and barakah.</p>
             <div className="invite-to">PERSONALLY INVITED<div className="invitee-name-blocks">{inviteeNames.map((name,index)=><b key={`${name}-${index}`}>{name}</b>)}</div><small>{guestLimit===1?'Individual invitation':`Invitation for up to ${guestLimit} guests`}{inviteCode&&<> · Code: {inviteCode}</>}</small></div>
