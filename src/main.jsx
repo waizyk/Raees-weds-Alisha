@@ -449,7 +449,7 @@ function InviteExperience({close,go,onVerified,eventInfo}){
             <p className="invite-kicker">TOGETHER WITH THEIR FAMILIES</p>
             <h2><span>Mohammed Raees Khan</span><em className="love-mark">&</em><span>Alisha Ahmed</span></h2>
             <i>request the honour of your presence at their</i><p className="invite-event-name">Nikah <span>and</span> Walima</p>
-            <div className="invite-date"><div className="invite-date-days"><b>{firstInviteDate.getDate()}</b>{hasDateRange&&<><i/><b>{lastInviteDate.getDate()}</b></>}</div><span>{firstInviteDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}<br/>{firstInviteDate.getFullYear()}</span></div>
+            <div className="invite-date"><div className="invite-date-days"><b>{firstInviteDate.getDate()}</b>{hasDateRange&&<><i aria-hidden="true"/><b>{lastInviteDate.getDate()}</b></>}</div><span className="invite-date-meta"><em>{firstInviteDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}</em><em>{firstInviteDate.getFullYear()}</em></span></div>
             <p className="invite-place">{eventSettings.city.toUpperCase()} · {eventSettings.country.toUpperCase()}</p>
             <p className="dua">May Allah bless this union with love, mercy and barakah.</p>
             <div className="invite-to">PERSONALLY INVITED<div className="invitee-name-blocks">{inviteeNames.map((name,index)=><b key={`${name}-${index}`}>{name}</b>)}</div><small>{guestLimit===1?'Individual invitation':`Invitation for up to ${guestLimit} guests`}{inviteCode&&<> · Code: {inviteCode}</>}</small></div>
