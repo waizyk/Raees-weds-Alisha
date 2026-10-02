@@ -444,7 +444,7 @@ function InviteExperience({close,go,onVerified,eventInfo}){
         <div className="scroll-rod scroll-rod-top"><i/><span/><i/></div>
         <div className="scroll-window"><div className="scroll-invitation">
           <div className="card-inner">
-            <span className="double-happiness" aria-label="Double happiness"><img src={`${import.meta.env.BASE_URL}double-happiness.png`} alt=""/></span>
+            <span className="double-happiness" aria-label="Double happiness">囍</span>
             <p className="invite-bismillah">BISMILLĀHIR-RAḤMĀNIR-RAḤĪM</p>
             <p className="invite-kicker">TOGETHER WITH THEIR FAMILIES</p>
             <h2><span>Mohammed Raees Khan</span><em className="love-mark">&</em><span>Alisha Ahmed</span></h2>
