@@ -151,14 +151,17 @@ function Details({ go, eventInfo }) {
   const proceedings=(eventInfo.proceedings||[]).filter(event=>event.is_visible!==false).sort((a,b)=>`${a.event_date||''} ${a.start_time||''}`.localeCompare(`${b.event_date||''} ${b.start_time||''}`));
   return <PageHero eyebrow="ORDER OF CELEBRATION" title={<>The days’<br/><em>proceedings.</em></>}>
     <div className="proceedings-intro"><p className="eyebrow">A THOUGHTFUL NOTE</p><h3>Two meaningful days, shared with the people we love.</h3><p>{s.guest_note}</p>{s.contact_note&&<p>{s.contact_note}</p>}</div>
-    {proceedings.length>0?<div className="proceeding-detail-blocks">{proceedings.map((event,i)=>{const eventDate=new Date(`${event.event_date}T00:00:00`);const displayTitle=/nikah/i.test(event.title)?'Nikah':event.title;return <article className="proceeding-detail-card" key={event.id||i}>
-      <div className="proceeding-date-panel"><small>{eventDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}</small><strong>{eventDate.getDate()}</strong><span>{eventDate.getFullYear()}</span><em>{eventDate.toLocaleDateString('en-GB',{weekday:'long'}).toUpperCase()}</em></div>
-      <div className="proceeding-detail-lines"><div className="proceeding-title"><small>{String(i+1).padStart(2,'0')} · CELEBRATION</small><h2>{displayTitle}</h2>{event.description&&<p>{event.description}</p>}</div>
-        <div className="proceeding-info-row"><Clock/><span><small>THE TIME</small><b>{formatTime(event.start_time)}{event.end_time?` – ${formatTime(event.end_time)}`:''}</b></span></div>
-        <div className="proceeding-info-row"><MapPin/><span><small>THE PLACE</small><b>{event.venue_name||'Venue to be confirmed'}</b><p>{event.address||`${s.city}, ${s.country}`}{event.location_private?' · Full details for invited guests':''}</p></span></div>
-        <div className="proceeding-info-row"><Leaf/><span><small>THE ATTIRE</small><b>{event.attire||s.attire}</b><p>{s.attire_note}</p></span></div>
+    {proceedings.length>0?<div className="classic-proceeding-blocks">{proceedings.map((event,i)=>{const eventDate=new Date(`${event.event_date}T00:00:00`);const displayTitle=/nikah/i.test(event.title)?'Nikah':event.title;return <section className="classic-proceeding" key={event.id||i}>
+      <div className="classic-proceeding-heading"><p className="eyebrow">{String(i+1).padStart(2,'0')} · {eventDate.toLocaleDateString('en-GB',{weekday:'long'}).toUpperCase()}</p><h2>{displayTitle}</h2></div>
+      <div className="details-card">
+        <div className="date-block"><small>{eventDate.toLocaleDateString('en-GB',{month:'long'}).toUpperCase()}</small><strong>{eventDate.getDate()}</strong><span>{eventDate.getFullYear()}</span></div>
+        <div className="detail-lines">
+          <div><Clock/><span><small>THE TIME</small><b>{formatTime(event.start_time)}{event.end_time?` – ${formatTime(event.end_time)}`:''}</b><p>{event.description||'Final timings will be shared soon.'}</p></span></div>
+          <div><MapPin/><span><small>THE PLACE</small><b>{event.venue_name||'Venue to be confirmed'}</b><p>{event.address||`${s.city}, ${s.country}`}{event.location_private?' · Full details for invited guests':''}</p></span></div>
+          <div><Leaf/><span><small>THE ATTIRE</small><b>{event.attire||s.attire}</b><p>{s.attire_note}</p></span></div>
+        </div>
       </div>
-    </article>})}</div>:<div className="empty-list"><CalendarDays/><b>Proceedings will be shared soon</b></div>}
+    </section>})}</div>:<div className="empty-list"><CalendarDays/><b>Proceedings will be shared soon</b></div>}
     <div className="proceedings-response"><p>We would be honoured to celebrate these days with you.</p><button className="button dark" onClick={() => go('rsvp')}>Respond to invitation <ArrowRight size={16}/></button></div>
   </PageHero>;
 }
