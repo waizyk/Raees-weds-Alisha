@@ -143,8 +143,7 @@ story += [P('One beautiful place for<br/>every guest and every memory.', 'CoverT
 story += [P('A private digital wedding experience, thoughtfully made for two', 'CoverSub'), Spacer(1, 15*mm)]
 cover_box = Table([
     [P('PREPARED FOR', 'MonoSmall'), P('Private Wedding Client', 'H2Dark')],
-    [P('PROPOSAL DATE', 'MonoSmall'), P('26 September 2026', 'BodyDark')],
-    [P('VALID UNTIL', 'MonoSmall'), P('10 October 2026', 'BodyDark')],
+    [P('DATE', 'MonoSmall'), P('____________________________', 'BodyDark')],
     [P('CONTACT', 'MonoSmall'), P('https.khan.sa@gmail.com', 'BodyDark')],
 ], colWidths=[45*mm, 110*mm])
 cover_box.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),1,GREEN),('INNERGRID',(0,0),(-1,-1),.4,LINE),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
@@ -229,7 +228,7 @@ story += [package_card('Signature Celebration','MOST POPULAR','R 9,500','Created
     'Up to 250 invited guests and authorised Host accounts',
     'Twelve months of hosting, three revision rounds and 30-day launch support',
 ],accent=True)]
-story += [Spacer(1,6*mm),panel([P('PRIVATE CLIENT BONUS','H3Dark'),P('If accepted within the proposal-validity period, Ace Tech will include the first downloadable post-wedding archive and a custom RA-style couple monogram at no additional charge.','SmallDark')],pad=11,border=GREEN),PageBreak()]
+story += [Spacer(1,6*mm),panel([P('PRIVATE CLIENT BONUS','H3Dark'),P('Ace Tech will include the first downloadable post-wedding archive and a custom RA-style couple monogram at no additional charge.','SmallDark')],pad=11,border=GREEN),PageBreak()]
 
 story += section_header('06 // Bespoke', 'Black Tie Experience', 'For couples who want a distinctive, high-touch digital celebration with concierge implementation and a keepsake to keep forever.')
 story += [package_card('Black Tie Experience','CONCIERGE BUILD','R 14,000','Our most complete experience: original creative direction, concierge preparation and a permanent downloadable keepsake after the wedding.',[
@@ -282,7 +281,6 @@ story += [pt,Spacer(1,6*mm),panel([P('ESTIMATED DELIVERY','H2Dark'),P('<b>Classi
 story += section_header('09 // Commercial terms', 'Clear promises create a confident beginning.')
 terms = [
     terms_row('PAYMENT','50% booking deposit is payable to reserve production capacity. The remaining 50% is payable after final client approval and before the website is made publicly accessible or guest invitations are released. Ace Tech is not obliged to launch until cleared payment is received.'),
-    terms_row('VALIDITY','Standard proposal pricing is valid until 10 October 2026 and may be revised thereafter. The early-bird mechanism remains subject to written quotation validity, eligibility and production availability.'),
     terms_row('EARLY BIRD','The Black Tie early-bird package price is R 12,500, a saving of R 1,500 from the R 14,000 standard price. Eligibility requires the signed agreement and cleared 50% booking deposit to be received at least six calendar months before the confirmed wedding date. The wedding date must be disclosed before acceptance. The offer cannot be combined with another discount and excludes add-ons, rush fees and third-party costs.'),
     terms_row('CURRENCY','All prices are in ZAR. VAT, if legally applicable, will be shown on the invoice.'),
     terms_row('CONTENT','The client supplies accurate names, dates, venue details, photographs and guest information with permission to use them.'),
