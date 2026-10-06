@@ -11,9 +11,31 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfgen.canvas import Canvas
 from pathlib import Path
+from urllib.parse import quote
 import random
 
 OUT = Path(__file__).with_name('Ace-Tech-Private-Wedding-Proposal.pdf')
+WHATSAPP_MESSAGE = """Hi Ace Tech, I’m interested in a personal wedding website. Here are my initial details:
+
+1. Couple’s full names:
+2. Wedding date or dates:
+3. City and country:
+4. Celebrations or events to include:
+5. Estimated number of guests:
+6. Package I’m interested in (Classic, Signature or Black Tie):
+7. Features I need (invitations, RSVP, private venue details, family tree, seating, album, check-in or other):
+8. Preferred style, colours and overall feeling:
+9. Cultural or religious details to reflect respectfully:
+10. Should the venue and time remain private until guests verify their invitation?:
+11. RSVP deadline:
+12. Preferred website name or domain, if any:
+13. Are the wording, photographs and guest list ready?:
+14. Desired website launch date:
+15. Best time for Ace Tech to contact me:
+
+Please let me know the next steps and anything else you need."""
+WHATSAPP_URL = f'https://wa.me/27726079004?text={quote(WHATSAPP_MESSAGE)}'
+WHATSAPP_LINK = f'<link href="{WHATSAPP_URL}" color="#18D889">072 607 9004 — Start WhatsApp enquiry</link>'
 PAGE_W, PAGE_H = A4
 M = 18 * mm
 
@@ -145,7 +167,7 @@ cover_box = Table([
     [P('PREPARED FOR', 'MonoSmall'), P('Private Wedding Client', 'H2Dark')],
     [P('DATE', 'MonoSmall'), P('____________________________', 'BodyDark')],
     [P('EMAIL', 'MonoSmall'), P('https.khan.sa@gmail.com', 'BodyDark')],
-    [P('PHONE / WHATSAPP', 'MonoSmall'), P('072 607 9004', 'BodyDark')],
+    [P('PHONE / WHATSAPP', 'MonoSmall'), P(WHATSAPP_LINK, 'BodyDark')],
 ], colWidths=[45*mm, 110*mm])
 cover_box.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),1,GREEN),('INNERGRID',(0,0),(-1,-1),.4,LINE),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
 story += [cover_box, Spacer(1, 25*mm), P('BEAUTIFULLY PERSONAL. QUIETLY POWERFUL.', 'Kicker'), PageBreak()]
@@ -309,7 +331,7 @@ story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s make the firs
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
-    Spacer(1,3*mm),P('CONTACT ACE TECH','H3Dark'),P('https.khan.sa@gmail.com','H2Dark'),P('Phone / WhatsApp: 072 607 9004','BodyDark'),
+    Spacer(1,3*mm),P('CONTACT ACE TECH','H3Dark'),P('https.khan.sa@gmail.com','H2Dark'),P(WHATSAPP_LINK,'BodyDark'),P('Tap the WhatsApp link to open a guided enquiry with the information needed to plan your personal wedding website.','SmallDark'),
 ],pad=16,border=GREEN,bg=colors.HexColor('#0B1912'))
 story += [nextbox,Spacer(1,12*mm)]
 sig=Table([
