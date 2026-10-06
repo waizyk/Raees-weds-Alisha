@@ -97,14 +97,7 @@ def matrix_background(c: Canvas, doc):
             c.drawString(x, y0-j*9, stream[(start_at+j) % len(stream)])
 
 
-
-    # Small horizontal brand fragments reward closer inspection.
-    c.setFont('DVMonoBold', 5.2)
-    for _ in range(3):
-        c.setFillAlpha(rnd.uniform(.025, .05))
-        c.setFillColor(GREEN)
-        c.drawString(rnd.choice((8*mm, PAGE_W-48*mm)), rnd.randint(55, int(PAGE_H)-55), rnd.choice(('ACE//TECH','<ACE_TECH/>','{ACE TECH}')))
-
+    # Keep all Matrix branding in the narrow page-edge streams so it never crosses content.
     c.setFillAlpha(1)
     c.setStrokeColor(LINE)
     c.setLineWidth(.6)
@@ -240,7 +233,7 @@ comparison = [
     ['Investment','R 5,500','R 9,500','R 14,000*'],
 ]
 ct=Table([[Paragraph(str(c), styles['SmallDark']) if not hasattr(c,'wrap') else c for c in row] for row in comparison], colWidths=[58*mm,35*mm,36*mm,39*mm], repeatRows=1)
-ct.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PANEL_2),('BACKGROUND',(2,1),(2,-1),colors.HexColor('#0B1912')),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('TEXTCOLOR',(0,0),(-1,-1),SOFT),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
+ct.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PANEL_2),('BACKGROUND',(0,1),(-1,-1),BLACK),('BACKGROUND',(2,1),(2,-1),colors.HexColor('#0B1912')),('BOX',(0,0),(-1,-1),.8,LINE),('INNERGRID',(0,0),(-1,-1),.35,LINE),('TEXTCOLOR',(0,0),(-1,-1),SOFT),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
 story += [ct, Spacer(1,6*mm), panel([P('RECOMMENDED // SIGNATURE CELEBRATION','H2Dark'),P('The couple’s favourite balance: fully custom design, effortless guest communication and all the Host controls that remove unnecessary wedding admin.','BodyDark')], pad=13, border=GREEN), PageBreak()]
 
 # Three package details
