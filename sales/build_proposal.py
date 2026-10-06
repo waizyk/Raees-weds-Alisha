@@ -213,9 +213,15 @@ for i in range(0,len(feature_data),2):
     for title,desc in feature_data[i:i+2]:
         row.append(panel([P(title,'H3Dark'),P(desc,'SmallDark')], widths=[77*mm], pad=10))
     rows.append(row)
-ft=Table(rows,colWidths=[83*mm,83*mm],rowHeights=[34*mm]*4)
+ft=Table(rows,colWidths=[83*mm,83*mm],rowHeights=[31*mm]*4)
 ft.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),2),('RIGHTPADDING',(0,0),(-1,-1),2),('TOPPADDING',(0,0),(-1,-1),2),('BOTTOMPADDING',(0,0),(-1,-1),2)]))
-story += [ft, Spacer(1,5*mm), P('Final functionality is confirmed during discovery. Features not listed in the selected package are quoted separately before work begins.','SmallDark'), PageBreak()]
+story += [ft, Spacer(1,4*mm), panel([
+    P('ONE WEBSITE. FEWER SUPPLIERS. LESS REPEATED SPEND.','H2Dark'),
+    P('Instead of paying for disconnected invitation changes, RSVP software, extra information cards, guest-list chasing, seating tools, check-in tools, a guest-upload service and repeated update messages, one private platform brings the work together. One update reaches everyone; one dashboard keeps the hosts in control.','SmallDark'),
+    P('<b>WHAT IT CAN REDUCE OR REMOVE:</b> printing and reprinting, delivery costs, separate form or gallery subscriptions, spreadsheet administration, repetitive WhatsApp replies, manual RSVP follow-ups and paid coordinator hours spent on routine guest communication.','SmallDark'),
+    P('<b>BETTER USE OF PROFESSIONALS:</b> the platform does not replace the creative value of a photographer or the supplier expertise of a full wedding planner. It lets the photographer focus on beautiful coverage and the planner focus on the event—not links, lists and repeated questions. Couples who prefer to self-manage can use the Host Console instead of paying for additional guest-admin support.','SmallDark'),
+    P('<b>VALUE AFTER THE WEDDING:</b> approved memories, the couple’s story and the finished experience remain together, with archive options that avoid starting from zero after the celebration. Actual savings depend on the wedding scope and services selected.','SmallDark')
+], pad=10, border=GREEN), Spacer(1,3*mm), P('Final functionality is confirmed during discovery. Features outside the selected package are quoted before work begins.','SmallDark'), PageBreak()]
 
 # Package comparison
 story += section_header('03 // Investment', 'Choose how much of the experience you would like us to carry.', 'All pricing is in South African rand. The Signature Celebration is recommended for a fully customised private wedding.')
