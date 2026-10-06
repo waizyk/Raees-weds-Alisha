@@ -36,6 +36,10 @@ WHATSAPP_MESSAGE = """Hi Ace Tech, I’m interested in a personal wedding websit
 Please let me know the next steps and anything else you need."""
 WHATSAPP_URL = f'https://wa.me/27726079004?text={quote(WHATSAPP_MESSAGE)}'
 WHATSAPP_LINK = f'<link href="{WHATSAPP_URL}" color="#18D889">072 607 9004 — Start WhatsApp enquiry</link>'
+LIVE_DEMO_URL = 'https://waizyk.github.io/Raees-weds-Alisha/?invite=PREVIEW&amp;names=Future%20Couple&amp;limit=2'
+DEMO_VIDEO_URL = 'https://waizyk.github.io/Raees-weds-Alisha/downloads/Raees-Alisha-Website-Demo-2026.mp4'
+LIVE_DEMO_LINK = f'<link href="{LIVE_DEMO_URL}" color="#18D889">OPEN THE LIVE RAEES &amp; ALISHA EXPERIENCE →</link>'
+DEMO_VIDEO_LINK = f'<link href="{DEMO_VIDEO_URL}" color="#D8BE83">WATCH THE SHORT PLATFORM WALKTHROUGH →</link>'
 PAGE_W, PAGE_H = A4
 M = 18 * mm
 
@@ -181,7 +185,15 @@ vision_cols = Table([
      panel([P('AFTER THE DAY','H3Dark'),P('A beautiful digital keepsake that can be downloaded and revisited long after the celebration.','SmallDark')], widths=[79*mm], pad=10)],
 ], colWidths=[83*mm,83*mm], rowHeights=[37*mm,37*mm])
 vision_cols.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),2),('RIGHTPADDING',(0,0),(-1,-1),2),('TOPPADDING',(0,0),(-1,-1),2),('BOTTOMPADDING',(0,0),(-1,-1),2)]))
-story += [vision_cols, Spacer(1, 7*mm), panel([P('THE ACE TECH DIFFERENCE','H2Dark'),P('This is more than a form behind a template. It is the feeling of being personally invited, the reassurance of clear information and the joy of preserving the day—all designed as one seamless experience.','BodyDark')], pad=14, border=GREEN), PageBreak()]
+story += [vision_cols, Spacer(1, 5*mm), panel([
+    P('LIVE EXAMPLE // RAEES & ALISHA','H2Dark'),
+    P('Experience a working wedding website before choosing your package. The preview opens with a personalised ceremonial invitation; the walkthrough shows more of the guest and Host journey. Private guest information remains protected.','SmallDark'),
+    P(LIVE_DEMO_LINK,'H3Dark'),
+    P(DEMO_VIDEO_LINK,'MonoSmall'),
+    Spacer(1,2*mm),
+    P('<b>CLASSIC:</b> polished invitation and RSVP essentials &nbsp; // &nbsp; <b>SIGNATURE:</b> the recommended complete guest and Host experience &nbsp; // &nbsp; <b>BLACK TIE:</b> original art direction, concierge setup and a permanent downloadable archive.','SmallDark'),
+    P('Every client receives their own separate website, design and private data environment—the example is inspiration, never a copied identity.','SmallDark')
+], pad=11, border=GREEN), PageBreak()]
 
 # Deliverables
 story += section_header('02 // Experience', 'What the complete wedding platform can include.')
