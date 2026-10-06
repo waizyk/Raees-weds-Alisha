@@ -144,7 +144,8 @@ story += [P('A private digital wedding experience, thoughtfully made for two', '
 cover_box = Table([
     [P('PREPARED FOR', 'MonoSmall'), P('Private Wedding Client', 'H2Dark')],
     [P('DATE', 'MonoSmall'), P('____________________________', 'BodyDark')],
-    [P('CONTACT', 'MonoSmall'), P('https.khan.sa@gmail.com', 'BodyDark')],
+    [P('EMAIL', 'MonoSmall'), P('https.khan.sa@gmail.com', 'BodyDark')],
+    [P('PHONE / WHATSAPP', 'MonoSmall'), P('072 607 9004', 'BodyDark')],
 ], colWidths=[45*mm, 110*mm])
 cover_box.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,-1),PANEL),('BOX',(0,0),(-1,-1),1,GREEN),('INNERGRID',(0,0),(-1,-1),.4,LINE),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
 story += [cover_box, Spacer(1, 25*mm), P('BEAUTIFULLY PERSONAL. QUIETLY POWERFUL.', 'Kicker'), PageBreak()]
@@ -308,7 +309,7 @@ story += [Spacer(1,12*mm),P('10 // NEXT STEP','Kicker'),P('Let’s make the firs
 nextbox=panel([
     P('TO RESERVE THE PROJECT','H2Dark'),
     P('1. Confirm the preferred package and optional upgrades.<br/>2. Approve the final statement of work.<br/>3. Pay the 50% booking deposit.<br/>4. Schedule the private discovery session.','BodyDark'),
-    Spacer(1,3*mm),P('CONTACT ACE TECH','H3Dark'),P('https.khan.sa@gmail.com','H2Dark'),
+    Spacer(1,3*mm),P('CONTACT ACE TECH','H3Dark'),P('https.khan.sa@gmail.com','H2Dark'),P('Phone / WhatsApp: 072 607 9004','BodyDark'),
 ],pad=16,border=GREEN,bg=colors.HexColor('#0B1912'))
 story += [nextbox,Spacer(1,12*mm)]
 sig=Table([
