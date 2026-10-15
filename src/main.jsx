@@ -35,7 +35,7 @@ const tables = [
 ];
 
 function App() {
-  const [view, setView] = useState('home');
+  const [view, setView] = useState(() => new URLSearchParams(window.location.search).has('countdown') ? 'countdown' : 'home');
   const [menu, setMenu] = useState(false);
   const [rsvps, setRsvps] = useState(() => JSON.parse(localStorage.getItem('raa-rsvps-live') || 'null') || seedRsvps);
   const [toast, setToast] = useState('');
@@ -67,6 +67,7 @@ function App() {
       <nav className={menu ? 'open' : ''}>
         <button onClick={() => go('story')}>Our story</button>
         <button onClick={() => go('details')}>The celebration</button>
+        <button onClick={() => go('countdown')}>Countdown</button>
         {mayView(privacy.album_visibility)&&<button onClick={() => go('album')}>Album</button>}
         {mayView(privacy.tree_visibility)&&<button onClick={() => go('tree')}>Our people</button>}
         <button className="nav-rsvp" onClick={() => go('rsvp')}>RSVP <ArrowRight size={15}/></button>
@@ -77,6 +78,7 @@ function App() {
 
     <main>
       {view === 'home' && <Home go={go} canAlbum={mayView(privacy.album_visibility)} eventInfo={eventInfo}/>}
+      {view === 'countdown' && <LiveCountdown eventInfo={eventInfo}/>}
       {view === 'story' && <Story/>}
       {view === 'details' && <Details go={go} eventInfo={eventInfo}/>}
       {view === 'rsvp' && <RsvpForm setRsvps={setRsvps} go={go} notify={setToast} eventInfo={eventInfo}/>}
@@ -91,6 +93,41 @@ function App() {
     {inviteOpen && <InviteExperience close={() => setInviteOpen(false)} go={go} onVerified={async(code)=>{setGuestVerified(true);try{const data=await getEventDetails(code);if(data?.settings)setEventInfo(data)}catch{}}} eventInfo={eventInfo}/>}
     {toast && <div className="toast"><CheckCircle2 size={18}/>{toast}</div>}
   </div>;
+}
+
+function LiveCountdown({eventInfo}) {
+  const settings=eventInfo.settings;
+  const visibleDates=(eventInfo.proceedings||[]).filter(event=>event.is_visible!==false&&event.event_date).map(event=>event.event_date).sort();
+  const firstDate=visibleDates[0]||settings.event_date;
+  const lastDate=visibleDates.at(-1)||settings.event_date;
+  const target=useMemo(()=>new Date(`${firstDate}T00:00:00+02:00`).getTime(),[firstDate]);
+  const [now,setNow]=useState(()=>Date.now());
+  useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer)},[]);
+  const remaining=Math.max(0,target-now);
+  const units={
+    days:Math.floor(remaining/86400000),
+    hours:Math.floor((remaining%86400000)/3600000),
+    minutes:Math.floor((remaining%3600000)/60000),
+    seconds:Math.floor((remaining%60000)/1000)
+  };
+  const first=new Date(`${firstDate}T00:00:00`); const last=new Date(`${lastDate}T00:00:00`);
+  const range=firstDate===lastDate?formatDate(firstDate):first.getMonth()===last.getMonth()&&first.getFullYear()===last.getFullYear()?`${first.getDate()}–${last.getDate()} ${first.toLocaleDateString('en-GB',{month:'long'})} ${first.getFullYear()}`:`${formatDate(firstDate)} – ${formatDate(lastDate)}`;
+  return <section className="live-countdown-page">
+    <div className="live-countdown-shade"/>
+    <div className="live-countdown-frame" aria-live="polite">
+      <p className="eyebrow light">NIKAH AND WALIMA</p>
+      <h1><span>Mohammed Raees</span><em className="love-mark">&</em><span>Alisha</span></h1>
+      <div className="countdown-love">愛</div>
+      {remaining>0?<>
+        <p className="countdown-intro">Until our celebration begins</p>
+        <div className="countdown-grid">
+          {Object.entries(units).map(([label,value])=><div key={label}><b>{String(value).padStart(2,'0')}</b><small>{label}</small></div>)}
+        </div>
+      </>:<div className="countdown-arrived"><b>Today is the day</b><span>May Allah bless this union with love, mercy and barakah.</span></div>}
+      <div className="countdown-date"><i/><p>{range}<small>{settings.city} · {settings.country}</small></p><i/></div>
+      <p className="countdown-note">With grateful hearts, the celebration draws near.</p>
+    </div>
+  </section>
 }
 
 function Home({ go, canAlbum, eventInfo }) {
